@@ -2,7 +2,7 @@ import java.io.*;
 import java.net.*;
 
 public class Server {
-	private static final int PORT = 5000;
+	private static final int PORT = 1234;
 	private static DatagramSocket datagramSocket;
 	private static DatagramPacket inPacket, outPacket;
 	private static byte[] buffer;
