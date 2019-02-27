@@ -1,0 +1,34 @@
+{
+  "plst": [
+  {
+    "user": "Wei",
+    "playLists": [
+      {
+        "plName": "Good Vibezz",
+        "songs": "SOMZWCG12A8C13C480,SOCIWDW12A8C13D406,SOYMRWW12A6D4FAB14,SOKEJEJ12A8C13E0D0"
+      },
+      {
+        "plName": "Morning Run",
+        "songs": "SOQHXMF12AB0182363,SOMUYGI12AB0188633,SORAMLE12AB017C8B0,SOBONFF12A6D4F84D8,SOHUOAP12A8AE488E9"
+      }
+    ]
+  },
+  {
+    "user": "Ken",
+    "playLists": [
+      {
+        "plName": "Chinese",
+        "songs": "SONHOTT12A8C13493C,SOFSOCN12A8C143F5D"
+      },
+      {
+        "plName": "Study",
+        "songs": "SOIAZJW12AB01853F1,SOUDSGM12AC9618304"
+      },
+      {
+        "plName": "Oldies",
+        "songs": "SOMJBYD12A6D4F8557,SOHKNRJ12A6701D1F8,SOILPQQ12AB017E82A,SOXLBJT12A8C140925"
+      }
+    ]
+  }
+]
+}

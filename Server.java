@@ -7,6 +7,7 @@ public class Server {
 	private static DatagramSocket datagramSocket;
 	private static DatagramPacket inPacket, outPacket;
 	private static byte[] buffer;
+	private static SignIn login;
 
 	public static void main(String[] args) {
 		System.out.println("Opening Port...");
@@ -18,6 +19,9 @@ public class Server {
 			System.out.println("Unable To Open...");
 			System.exit(1);
 		}
+		login = new SignIn();
+		System.out.println(login.getUserList());
+
 		handleClient();
 	}
 
@@ -31,6 +35,8 @@ public class Server {
 			InetAddress clientAddress = null;
 			int clientPort;
 			int numRequests = 1;
+			String username;
+			String password;
 
 			do {
 				// This section of code for receiving the UDP packets
@@ -43,6 +49,15 @@ public class Server {
 				System.out.println("Request #" + numRequests);
 				System.out.println("Incoming client request from " + clientAddress + " at port " + clientPort);
 				System.out.println("Message: " + messageIn);
+				
+				//check credentials
+				username = messageIn.split(",")[0];
+				password = messageIn.split(",")[1];
+				boolean isValid = login.checkCredentials(username, password, login.getUserList().getList());
+				System.out.println("Username: " + username);
+				System.out.println("Password: " + password);
+				System.out.println("Is a valid credential: " + isValid);
+
 
 				// This section of code for sending the UDP packets
 				messageOut = "message" + numRequests + ": " + messageIn;
