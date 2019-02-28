@@ -10,15 +10,13 @@ import java.net.UnknownHostException;
 import java.util.List;
 
 public class SignIn {
-    
-    
     private UserList userList;
     private String path;
     private File file;
 
     public SignIn() {
         // Get path for local memory
-        path = "assets\\users.json";
+        path = "/Users/kenle/Documents/Spring2018/CECS327/waveBackend/assets/users.json";
         file = new File(path);    
         userList = loadJsonIntoUserList();
     }
