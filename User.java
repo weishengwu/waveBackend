@@ -6,11 +6,6 @@ public class User implements Serializable {
     String username;
     @SerializedName("password")
     String password;
-    @SerializedName("playlistJson")
-    String playlistJson;
-    @SerializedName("login")
-    Boolean login;
-
 
     public void setUserName(String name)
     {
@@ -28,22 +23,6 @@ public class User implements Serializable {
     public String getPassword()
     {
         return this.password;
-    }
-    public void setJson(String json)
-    {
-        this.playlistJson = json;
-    }
-    public String getJson()
-    {
-        return this.playlistJson;
-    }
-    public void setLoginCheck(Boolean loginCheck)
-    {
-        this.login = loginCheck;
-    }
-    public Boolean getLoginCheck()
-    {
-        return this.login;
     }
 
     @Override

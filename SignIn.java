@@ -93,14 +93,14 @@ public class SignIn {
     * @param username The username the user inputted
     * @param password The password the user inputted
     * @param userlist The user list which contains all the users
-    * @param v        The view object
+    * 
     */
-    public boolean checkCredentials(String username, String password, List<User> userlist) {
+    public User checkCredentials(String username, String password, List<User> userlist) {
         for (int i = 0; i < userlist.size(); i++) {
             if (username.equals(userlist.get(i).getUserName()) && password.equals(userlist.get(i).getPassword())) {
-                return true;
+                return userlist.get(i);
             }
         }
-        return false;
+        return null;
     }
 }

@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.*;
+import org.json.simple.*;
 
 public class Server {
 	// Declare variables
@@ -11,6 +12,7 @@ public class Server {
 
 	public static void main(String[] args) {
 		System.out.println("Opening Port...");
+		//Attempt to start server
 		try {
 			datagramSocket = new DatagramSocket(PORT);
 			System.out.println("Datagram socket properly opened at port " + PORT);
@@ -20,9 +22,7 @@ public class Server {
 			System.exit(1);
 		}
 		login = new SignIn();
-		System.out.println(login.getUserList());
-
-		handleClient();
+		handleClient(); //wait for message from client
 	}
 
 	/** 
@@ -31,12 +31,9 @@ public class Server {
 	private static void handleClient() {
 		try {
 			String messageIn;
-			String messageOut;
 			InetAddress clientAddress = null;
 			int clientPort;
 			int numRequests = 1;
-			String username;
-			String password;
 
 			do {
 				// This section of code for receiving the UDP packets
@@ -50,18 +47,16 @@ public class Server {
 				System.out.println("Incoming client request from " + clientAddress + " at port " + clientPort);
 				System.out.println("Message: " + messageIn);
 				
-				//check credentials
-				username = messageIn.split(",")[0];
-				password = messageIn.split(",")[1];
-				boolean isValid = login.checkCredentials(username, password, login.getUserList().getList());
-				System.out.println("Username: " + username);
-				System.out.println("Password: " + password);
-				System.out.println("Is a valid credential: " + isValid);
+				/*	AT THIS POINT, MESSAGE HAS BEEN RECIEVED AND IS STORED IN "messageIn" */
 
+				//check credentials
+				buffer = handleSignIn(messageIn);
+				//marshall json array to send back
+				outPacket = new DatagramPacket(buffer, buffer.length, clientAddress, clientPort);
 
 				// This section of code for sending the UDP packets
-				messageOut = "message" + numRequests + ": " + messageIn;
-				outPacket = new DatagramPacket(messageOut.getBytes(), messageOut.length(), clientAddress, clientPort);
+				// messageOut = "message" + numRequests + ": " + messageIn;
+				// outPacket = new DatagramPacket(messageOut.getBytes(), messageOut.length(), clientAddress, clientPort);
 				datagramSocket.send(outPacket);
 				numRequests++;
 				System.out.println("Successfully sent response back to client at address " + clientAddress + "\n");
@@ -74,4 +69,17 @@ public class Server {
 			datagramSocket.close();
 		}
 	}
+
+	public static byte[] handleSignIn(String mIn) {
+		String username = mIn.split(",")[0];
+		String password = mIn.split(",")[1];
+		User validUser = login.checkCredentials(username, password, login.getUserList().getList());
+		JSONObject obj = new JSONObject();
+		if (validUser != null) {
+			obj.put("username", validUser.getUserName());
+		}
+
+		return obj.toString().getBytes(theCharset);
+	}
+
 }
