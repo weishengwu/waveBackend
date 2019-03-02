@@ -16,7 +16,7 @@ public class SignIn {
 
     public SignIn() {
         // Get path for local memory
-        path = "/Users/kenle/Documents/Spring2018/CECS327/waveBackend/assets/users.json";
+        path = "assets/users.json";
         file = new File(path);    
         userList = loadJsonIntoUserList();
     }
@@ -101,4 +101,20 @@ public class SignIn {
         }
         return null;
     }
+
+    public static byte[] handleSignIn(String mIn) throws Exception{
+		try {
+			String username = mIn.split(",")[0];
+			String password = mIn.split(",")[1];
+			User validUser = checkCredentials(username, password, login.getUserList().getList());
+			JsonObject obj = new JsonObject();
+			if (validUser != null) {
+				obj.put("username", validUser.getUserName());
+			}
+			return obj.toString().getBytes("utf-8");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return (new JSONObject()).toString().getBytes("utf-8");
+		}
+	}
 }

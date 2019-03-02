@@ -1,6 +1,11 @@
 import java.io.*;
 import java.net.*;
+import java.util.HashMap;
+
 import org.json.simple.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 
 public class Server {
 	// Declare variables
@@ -9,8 +14,11 @@ public class Server {
 	private static DatagramPacket inPacket, outPacket;
 	private static byte[] buffer;
 	private static SignIn login;
+	private static HashMap<Integer,JsonObject> runningReq;
+	private static Dispatcher dispatcher;
 
 	public static void main(String[] args) {
+		runningReq = new HashMap<Integer,JsonObject>();
 		System.out.println("Opening Port...");
 		// Attempt to start server
 		try {
@@ -35,6 +43,7 @@ public class Server {
 			InetAddress clientAddress = null;
 			int clientPort;
 			int numRequests = 1;
+			dispatcher = new Dispatcher();
 
 			do {
 				// This section of code for receiving the UDP packets
@@ -47,12 +56,26 @@ public class Server {
 				System.out.println("Request #" + numRequests);
 				System.out.println("Incoming client request from " + clientAddress + " at port " + clientPort);
 				System.out.println("Message: " + messageIn);
-
 				/* AT THIS POINT, MESSAGE HAS BEEN RECIEVED AND IS STORED IN "messageIn" */
+				JsonObject jsonIn = new Gson().fromJson(messageIn,JsonObject.class);
 
+
+
+				
+
+				//******************************** Add thread here*******************************************
+
+
+
+
+
+
+
+				
+				JsonObject ret = dispatcher.dispatch(jsonIn.toString());
 				// check credentials
 				try {
-					buffer = handleSignIn(messageIn);
+					buffer = ret.toString().toBytes();
 				} catch(Exception e) {
 					e.printStackTrace();
 				}
@@ -73,22 +96,6 @@ public class Server {
 		} finally {
 			System.out.println("\n Closing connection...");
 			datagramSocket.close();
-		}
-	}
-
-	public static byte[] handleSignIn(String mIn) throws Exception{
-		try {
-			String username = mIn.split(",")[0];
-			String password = mIn.split(",")[1];
-			User validUser = login.checkCredentials(username, password, login.getUserList().getList());
-			JSONObject obj = new JSONObject();
-			if (validUser != null) {
-				obj.put("username", validUser.getUserName());
-			}
-			return obj.toString().getBytes("utf-8");
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
 		}
 	}
 }
