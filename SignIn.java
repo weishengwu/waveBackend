@@ -48,6 +48,8 @@ public class SignIn {
     }
     
     public String Login(String username, String password) throws Exception{
+        System.out.println("Entered username: " + username);
+        System.out.println("Entered password: " + password);
 		try {
 			User validUser = checkCredentials(username, password);
 			JsonObject obj = new JsonObject();
@@ -56,8 +58,8 @@ public class SignIn {
 			}
 			return obj.toString();
 		} catch (Exception e) {
-			e.printStackTrace();
-			return (new JsonObject().toString());
+            System.out.println("Not a valid user... returning empty json object");
+			return (new JsonObject()).toString();
 		}
     }
     

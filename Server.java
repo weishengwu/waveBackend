@@ -73,7 +73,8 @@ public class Server {
 
 
 				
-				JsonObject ret = (dispatcher.dispatch(messageIn)).get("ret").getAsJsonObject();
+				JsonObject ret = new Gson().fromJson((dispatcher.dispatch(messageIn)).get("ret").getAsString(),JsonObject.class);
+				System.out.println(ret.toString());
 				// check credentials
 				try {
 					buffer = ret.toString().getBytes();
