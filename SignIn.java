@@ -1,62 +1,25 @@
-import com.google.gson.Gson;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.List;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 public class SignIn {
-    private UserList userList;
-    private String path;
-    private File file;
-
-    public SignIn() {
-        // Get path for local memory
-        path = "assets/users.json";
-        file = new File(path);    
-        userList = loadJsonIntoUserList();
+    UserList userlist;    
+    public SignIn(){
+        userlist = loadJsonIntoUserList();
     }
-
-    public UserList getUserList() {
-        return userList;
-    }
-    
-    /**
-    * Updates userList using local memory json file
-    *
-    * @param file - file of local json
-    * @return UsrList - new updated user list
-    */
-    public UserList updateUserList(File file) {
-        UserList userTemp = null;
-        try {
-            if (file.exists()) {
-                InputStream inputStream = new FileInputStream(file);
-                String myJson = inputStreamToString(inputStream);
-                userTemp = new Gson().fromJson(myJson, UserList.class);
-                inputStream.close();
-                
-                //Log.d("ADDUSER", userList.toString());
-                
-                return userTemp;
-            }
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return userTemp;
-    }
-    
     /**
     * Loads the users from the users.json file into userlist object using GSON
     *
     * @return the populated user list
     */
     public UserList loadJsonIntoUserList() {
+        String path = "assets/users.json";
+        File file = new File(path);    
+
         try {
             InputStream inputStream = new FileInputStream(file);
             String myJson = inputStreamToString(inputStream);
@@ -84,6 +47,19 @@ public class SignIn {
         }
     }
     
+    public String Login(String username, String password) throws Exception{
+		try {
+			User validUser = checkCredentials(username, password);
+			JsonObject obj = new JsonObject();
+			if (validUser != null) {
+				obj.addProperty("username", validUser.getUserName());
+			}
+			return obj.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return (new JsonObject().toString());
+		}
+    }
     
     /**
     * Checks if username and password that user inputted matches a user profile provided from the json file
@@ -93,28 +69,12 @@ public class SignIn {
     * @param userlist The user list which contains all the users
     * 
     */
-    public User checkCredentials(String username, String password, List<User> userlist) {
-        for (int i = 0; i < userlist.size(); i++) {
-            if (username.equals(userlist.get(i).getUserName()) && password.equals(userlist.get(i).getPassword())) {
-                return userlist.get(i);
+    public User checkCredentials(String username, String password) {
+        for (int i = 0; i < userlist.getList().size(); i++) {
+            if (username.equals(userlist.getList().get(i).getUserName()) && password.equals(userlist.getList().get(i).getPassword())) {
+                return userlist.getList().get(i);
             }
         }
         return null;
     }
-
-    public static byte[] handleSignIn(String mIn) throws Exception{
-		try {
-			String username = mIn.split(",")[0];
-			String password = mIn.split(",")[1];
-			User validUser = checkCredentials(username, password, login.getUserList().getList());
-			JsonObject obj = new JsonObject();
-			if (validUser != null) {
-				obj.put("username", validUser.getUserName());
-			}
-			return obj.toString().getBytes("utf-8");
-		} catch (Exception e) {
-			e.printStackTrace();
-			return (new JSONObject()).toString().getBytes("utf-8");
-		}
-	}
 }

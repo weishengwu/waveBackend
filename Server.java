@@ -2,7 +2,6 @@ import java.io.*;
 import java.net.*;
 import java.util.HashMap;
 
-import org.json.simple.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -19,6 +18,10 @@ public class Server {
 
 	public static void main(String[] args) {
 		runningReq = new HashMap<Integer,JsonObject>();
+		dispatcher = new Dispatcher();
+		//register objects and methods here
+		SignIn signIn = new SignIn();
+		dispatcher.registerObject(signIn, "SignIn");
 		System.out.println("Opening Port...");
 		// Attempt to start server
 		try {
@@ -29,7 +32,6 @@ public class Server {
 			System.out.println("Unable To Open...");
 			System.exit(1);
 		}
-		login = new SignIn();
 		//System.out.print(login.getUserList().getList());
 		handleClient(); // wait for message from client
 	}
@@ -43,7 +45,6 @@ public class Server {
 			InetAddress clientAddress = null;
 			int clientPort;
 			int numRequests = 1;
-			dispatcher = new Dispatcher();
 
 			do {
 				// This section of code for receiving the UDP packets
@@ -57,7 +58,7 @@ public class Server {
 				System.out.println("Incoming client request from " + clientAddress + " at port " + clientPort);
 				System.out.println("Message: " + messageIn);
 				/* AT THIS POINT, MESSAGE HAS BEEN RECIEVED AND IS STORED IN "messageIn" */
-				JsonObject jsonIn = new Gson().fromJson(messageIn,JsonObject.class);
+				// JsonObject jsonIn = new Gson().fromJson(messageIn,JsonObject.class);
 
 
 
@@ -72,10 +73,10 @@ public class Server {
 
 
 				
-				JsonObject ret = dispatcher.dispatch(jsonIn.toString());
+				JsonObject ret = (dispatcher.dispatch(messageIn)).get("ret").getAsJsonObject();
 				// check credentials
 				try {
-					buffer = ret.toString().toBytes();
+					buffer = ret.toString().getBytes();
 				} catch(Exception e) {
 					e.printStackTrace();
 				}
