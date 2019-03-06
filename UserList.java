@@ -22,6 +22,7 @@ public class UserList implements Serializable
     {
         list.add(user);
     }
+
     @Override
     public String toString()
     {
