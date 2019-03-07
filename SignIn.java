@@ -1,15 +1,6 @@
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-
-import java.io.FileOutputStream;
-
 
 public class SignIn {
     UserList userlist;    
@@ -51,6 +42,7 @@ public class SignIn {
             if(!userExist)
             {
                 addUser(username, password);
+                refreshUserList();
                 obj.addProperty("IsSignedUp", userExist);
             }
             return obj.toString();
@@ -93,22 +85,7 @@ public class SignIn {
     public void addUser(String name, String password) {
         User newUser = new User(name, password);        
         userlist.addToList(newUser);
-        
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String strJson = gson.toJson(userlist);
-        JsonObject jObj = new Gson().fromJson(strJson, JsonObject.class);
-        
-        try {
-            String filePath =  "assets/users.json";
-            File file = new File(filePath);
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            fileOutputStream.write(strJson.getBytes());
-            fileOutputStream.flush();
-            fileOutputStream.close();
-        } 
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        ReadFile.writeUserListToJson(userlist);
     }
     
     

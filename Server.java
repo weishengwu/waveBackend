@@ -24,8 +24,8 @@ public class Server {
 		//register objects and methods here
 		SignIn signIn = new SignIn();
 		dispatcher.registerObject(signIn, "SignIn");
-		UserList userlist = new UserList();
-		dispatcher.registerObject(userlist, "UserList");
+		EditUser editUser = new EditUser();
+		dispatcher.registerObject(editUser, "UserList");
 
 
 		System.out.println("Opening Port...");

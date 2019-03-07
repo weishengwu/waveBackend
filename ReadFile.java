@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -42,7 +43,22 @@ public class ReadFile {
             return null;
         }
     }
-
+    public static void writeUserListToJson(UserList userlist) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String strJson = gson.toJson(userlist);
+        
+        try {
+            String filePath =  "assets/users.json";
+            File file = new File(filePath);
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            fileOutputStream.write(strJson.getBytes());
+            fileOutputStream.flush();
+            fileOutputStream.close();
+        } 
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     /**
     * Reads a file using inputstream
     *

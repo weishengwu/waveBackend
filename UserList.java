@@ -11,11 +11,12 @@ public class UserList implements Serializable
     {
         return this.list;
     }
-    public User get(int i) {
-        return this.list.get(i);
-    }
-    public int size() {
-        return this.list.size();
+    public User getUser(String uName) {
+        for (User u: list) {
+            if (u.getUserName().equals(uName))
+                return u;
+        }
+        return null;
     }
     public void setList(ArrayList<User> list)
     {
@@ -31,12 +32,11 @@ public class UserList implements Serializable
                 u.addPlaylist(pName);
         }
     }
-    public User.Playlist deletePlaylist(String uName, String pName) {
+    public void deletePlaylist(String uName, String pName) {
         for (User u: list) {
             if (u.getUserName().equals(uName))
-                return u.deletePlaylist(pName);
+                u.deletePlaylist(pName);
         }
-        return null;
     }
     public void addSongToPlaylist(String uName, String pName, String sID) {
         for (User u: list) {
@@ -44,12 +44,11 @@ public class UserList implements Serializable
                 u.addSongToPlaylist(pName, sID);
         }
     }
-    public String deleteSongFromPlaylist(String uName, String pName, String sID) {
+    public void deleteSongFromPlaylist(String uName, String pName, String sID) {
         for (User u: list) {
             if (u.getUserName().equals(uName))
-                return u.deleteSongFromPlaylist(pName, sID);
+                u.deleteSongFromPlaylist(pName, sID);
         }
-        return null;
     }
     @Override
     public String toString()
