@@ -10,7 +10,12 @@ public class MusicList implements Serializable{
     {
         return this.list;
     }
-
+    public Music get(int i) {
+        return this.list.get(i);
+    }
+    public int size() {
+        return this.list.size();
+    }
     public Music getSong(String id) {
         for(int i = 0; i < list.size(); i++) {
             if(list.get(i).getSongID().equals(id))
@@ -18,7 +23,6 @@ public class MusicList implements Serializable{
         }
         return null;
     }
-
     @Override
     public String toString() {
         String results = "";

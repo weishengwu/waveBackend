@@ -16,7 +16,9 @@ public class SignIn {
     public SignIn(){
         userlist = ReadFile.loadJsonIntoUserList();
     }
-    
+    public void refreshUserList() {
+        userlist = ReadFile.loadJsonIntoUserList();
+    }
     public String Login(String username, String password) throws Exception {
         System.out.println("Entered username: " + username);
         System.out.println("Entered password: " + password);
@@ -24,7 +26,14 @@ public class SignIn {
             User validUser = checkCredentials(username, password);
             JsonObject obj = new JsonObject();
             if (validUser != null) {
-                obj.addProperty("username", validUser.getUserName());
+                //pack return jsonobject with music list and playlist info
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                String musicListString = gson.toJson(ReadFile.loadJsonIntoMusicList());
+                JsonObject musicListJson = new Gson().fromJson(musicListString, JsonObject.class);
+                String userString = gson.toJson(validUser);
+                JsonObject userJson = new Gson().fromJson(userString, JsonObject.class);
+                obj.add("musiclist", musicListJson);
+                obj.add("user", userJson);
             }
             return obj.toString();
         } 

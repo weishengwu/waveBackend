@@ -11,6 +11,12 @@ public class UserList implements Serializable
     {
         return this.list;
     }
+    public User get(int i) {
+        return this.list.get(i);
+    }
+    public int size() {
+        return this.list.size();
+    }
     public void setList(ArrayList<User> list)
     {
         this.list = list;
@@ -45,7 +51,6 @@ public class UserList implements Serializable
         }
         return null;
     }
-
     @Override
     public String toString()
     {

@@ -24,6 +24,8 @@ public class Server {
 		//register objects and methods here
 		SignIn signIn = new SignIn();
 		dispatcher.registerObject(signIn, "SignIn");
+		UserList userlist = new UserList();
+		dispatcher.registerObject(userlist, "UserList");
 
 
 		System.out.println("Opening Port...");
@@ -76,8 +78,12 @@ public class Server {
 
 
 
-				
+				JsonObject jsonIn = new Gson().fromJson(messageIn,JsonObject.class);
+				String requestID = jsonIn.get("requestID").getAsString();
+				String callSem = jsonIn.get("call-semantics").getAsString();
 				JsonObject ret = new Gson().fromJson((dispatcher.dispatch(messageIn)).get("ret").getAsString(),JsonObject.class);
+				ret.addProperty("requestID", requestID);
+				ret.addProperty("call-semantics", callSem);
 				System.out.println(ret.toString());
 				// check credentials
 				try {
