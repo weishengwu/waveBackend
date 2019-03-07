@@ -79,13 +79,34 @@ public class User implements Serializable {
     public void addPlaylist(String pName) {
         listOfPlaylists.add(new Playlist(pName));
     }
-    public void addSongToPlaylist(String pName, String songID) {
-        getPlaylist(pName).addSong(songID);
+    public Playlist deletePlaylist(String pName) {
+        for (int i = 0; i < listOfPlaylists.size(); i++) {
+            if (listOfPlaylists.get(i).getPlaylistName().equals(pName))
+            return listOfPlaylists.remove(i);
+        }
+        return null;
     }
     public Playlist getPlaylist(String pName) {
         for (Playlist p: listOfPlaylists) {
             if (p.getPlaylistName().equals(pName))
             return p;
+        }
+        return null;
+    }
+    public void addSongToPlaylist(String pName, String songID) {
+        getPlaylist(pName).addSong(songID);
+    }
+    public String deleteSongFromPlaylist(String pName, String songID) {
+        Playlist p = null;
+        for (int i = 0; i < listOfPlaylists.size(); i++) {
+            if (listOfPlaylists.get(i).getPlaylistName().equals(pName)) {
+                p = listOfPlaylists.get(i);
+                break;
+            }
+        }
+        for (int j = 0; j < p.getPlaylistSongIDs().size(); j++) {
+            if (p.getPlaylistSongIDs().get(j).equals(songID))
+                return p.getPlaylistSongIDs().remove(j);
         }
         return null;
     }
