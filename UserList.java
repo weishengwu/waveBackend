@@ -1,19 +1,18 @@
-import java .util.ArrayList;
-import java.util.List;
+import java.util.ArrayList;
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 public class UserList implements Serializable
 {
     @SerializedName("users")
-    private List<User> list = new ArrayList<User>();
+    private ArrayList<User> list = new ArrayList<User>();
 
-    public List<User> getList()
+    public ArrayList<User> getList()
     {
         return this.list;
     }
 
-    public void setList(List<User> list)
+    public void setList(ArrayList<User> list)
     {
         this.list = list;
     }

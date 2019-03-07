@@ -17,11 +17,15 @@ public class Server {
 	private static Dispatcher dispatcher;
 
 	public static void main(String[] args) {
-		runningReq = new HashMap<Integer,JsonObject>();
-		dispatcher = new Dispatcher();
+		runningReq = new HashMap<Integer,JsonObject>();		//Hashmap of current requests
+		dispatcher = new Dispatcher();						//Dispatcher
+		
+		
 		//register objects and methods here
 		SignIn signIn = new SignIn();
 		dispatcher.registerObject(signIn, "SignIn");
+
+
 		System.out.println("Opening Port...");
 		// Attempt to start server
 		try {
