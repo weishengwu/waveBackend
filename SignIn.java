@@ -19,11 +19,8 @@ public class SignIn {
             if (validUser != null) {
                 //pack return jsonobject with music list and playlist info
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                String musicListString = gson.toJson(ReadFile.loadJsonIntoMusicList());
-                JsonObject musicListJson = new Gson().fromJson(musicListString, JsonObject.class);
                 String userString = gson.toJson(validUser);
                 JsonObject userJson = new Gson().fromJson(userString, JsonObject.class);
-                obj.add("musiclist", musicListJson);
                 obj.add("user", userJson);
             }
             return obj.toString();

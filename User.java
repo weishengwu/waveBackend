@@ -25,6 +25,12 @@ public class User implements Serializable {
         public String getPlaylistName() {
             return playlistName;
         }
+        public int size() {
+            return songIDs.size();
+        }
+        public String get(int i) {
+            return songIDs.get(i).getSongID();
+        }
         public ArrayList<String> getPlaylistSongIDs() {
             ArrayList<String> ret = new ArrayList<String>();
             for (Song s: songIDs) {

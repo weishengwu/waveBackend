@@ -24,8 +24,10 @@ public class Server {
 		//register objects and methods here
 		SignIn signIn = new SignIn();
 		dispatcher.registerObject(signIn, "SignIn");
+		MusicList musiclist = ReadFile.loadJsonIntoMusicList();
+		dispatcher.registerObject(musiclist, "MusicList");
 		EditUser editUser = new EditUser();
-		dispatcher.registerObject(editUser, "UserList");
+		dispatcher.registerObject(editUser, "EditUser");
 
 
 		System.out.println("Opening Port...");
@@ -38,7 +40,6 @@ public class Server {
 			System.out.println("Unable To Open...");
 			System.exit(1);
 		}
-		//System.out.print(login.getUserList().getList());
 		handleClient(); // wait for message from client
 	}
 
@@ -64,7 +65,6 @@ public class Server {
 				System.out.println("Incoming client request from " + clientAddress + " at port " + clientPort);
 				System.out.println("Message: " + messageIn);
 				/* AT THIS POINT, MESSAGE HAS BEEN RECIEVED AND IS STORED IN "messageIn" */
-				// JsonObject jsonIn = new Gson().fromJson(messageIn,JsonObject.class);
 
 
 
@@ -84,7 +84,7 @@ public class Server {
 				JsonObject ret = new Gson().fromJson((dispatcher.dispatch(messageIn)).get("ret").getAsString(),JsonObject.class);
 				ret.addProperty("requestID", requestID);
 				ret.addProperty("call-semantics", callSem);
-				System.out.println(ret.toString());
+				//System.out.println(ret.toString());
 				// check credentials
 				try {
 					buffer = ret.toString().getBytes();
@@ -95,9 +95,6 @@ public class Server {
 				outPacket = new DatagramPacket(buffer, buffer.length, clientAddress, clientPort);
 
 				// This section of code for sending the UDP packets
-				// messageOut = "message" + numRequests + ": " + messageIn;
-				// outPacket = new DatagramPacket(messageOut.getBytes(), messageOut.length(),
-				// clientAddress, clientPort);
 				datagramSocket.send(outPacket);
 				numRequests++;
 				System.out.println("Successfully sent response back to client at address " + clientAddress + "\n");

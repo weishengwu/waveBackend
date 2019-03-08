@@ -5,12 +5,19 @@ public class Music implements Serializable {
     class Artist {
         @SerializedName("name")
         String artistName;
+        public Artist(String aName) {
+            artistName = aName;
+        }
     }
     class Song {
         @SerializedName("id")
         String songID;
         @SerializedName("title")
         String songTitle;
+        public Song(String sID, String sTitle) {
+            songID = sID;
+            songTitle = sTitle;
+        }
     }
 
     //Initialize classes
@@ -18,6 +25,11 @@ public class Music implements Serializable {
     Artist artist;
     @SerializedName("song")
     Song song;
+
+    public Music(String artistName, String songID, String songTitle) {
+        artist = new Artist(artistName);
+        song = new Song(songID, songTitle);
+    }
 
     // Getters and setters
     public void setArtistName(String n) {

@@ -23,7 +23,7 @@ public class EditUser {
         return returnUpdatedUser(userlist.getUser(uName));
     }
     public String addSongToPlaylist(String uName, String pName, String sID) {
-        userlist.addSongToPlaylist(uName, pName);
+        userlist.addSongToPlaylist(uName, pName, sID);
         ReadFile.writeUserListToJson(userlist);
         refreshUserList();
         return returnUpdatedUser(userlist.getUser(uName));
@@ -35,6 +35,7 @@ public class EditUser {
         return returnUpdatedUser(userlist.getUser(uName));
     }
     public String returnUpdatedUser(User user) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String userString = gson.toJson(user);
         JsonObject userJson = new Gson().fromJson(userString, JsonObject.class);
         return userJson.toString();
