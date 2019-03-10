@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.*;
 import java.util.HashMap;
+import java.util.Arrays;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -13,11 +14,11 @@ public class Server {
 	private static DatagramPacket inPacket, outPacket;
 	private static byte[] buffer;
 	private static SignIn login;
-	private static HashMap<Integer,JsonObject> runningReq;
+	private static HashMap<String,JsonObject> attendedReq;
 	private static Dispatcher dispatcher;
 
 	public static void main(String[] args) {
-		runningReq = new HashMap<Integer,JsonObject>();		//Hashmap of current requests
+		attendedReq = new HashMap<String,JsonObject>();		//Hashmap of current requests
 		dispatcher = new Dispatcher();						//Dispatcher
 		
 		
@@ -40,18 +41,20 @@ public class Server {
 			System.out.println("Unable To Open...");
 			System.exit(1);
 		}
-		handleClient(); // wait for message from client
+		//System.out.print(login.getUserList().getList());
+
+		receive(); // wait for message from client
+
 	}
 
 	/**
 	 * Handles the client request and sends a message back to the client
 	 */
-	private static void handleClient() {
+	private static void receive() {
 		try {
 			String messageIn;
 			InetAddress clientAddress = null;
 			int clientPort;
-			int numRequests = 1;
 
 			do {
 				// This section of code for receiving the UDP packets
@@ -60,43 +63,45 @@ public class Server {
 				datagramSocket.receive(inPacket);
 				clientAddress = inPacket.getAddress();
 				clientPort = inPacket.getPort();
+
+				datagramSocket.receive(inPacket);
+
 				messageIn = new String(inPacket.getData(), 0, inPacket.getLength());
-				System.out.println("Request #" + numRequests);
-				System.out.println("Incoming client request from " + clientAddress + " at port " + clientPort);
-				System.out.println("Message: " + messageIn);
+				//System.out.println("Request #" + numRequests);
+				//System.out.println("Incoming client request from " + clientAddress + " at port " + clientPort);
+				//System.out.println("Message: " + messageIn);
 				/* AT THIS POINT, MESSAGE HAS BEEN RECIEVED AND IS STORED IN "messageIn" */
+				JsonObject jsonIn = new Gson().fromJson(messageIn,JsonObject.class);
+
+				JsonObject ret = null;
+
+				String callSemantic = new String((jsonIn).get("call-semantics").getAsString());
 
 
+				if(callSemantic.equals("at-most-one"))
+				{
+					if (attendedReq.containsKey(jsonIn.get("requestID").getAsString())) 
+					{
+						send(attendedReq.get(jsonIn.get("requestID").getAsString()), clientAddress, clientPort);
+					}
+					else
+					{
+						ret = new Gson().fromJson((dispatcher.dispatch(jsonIn)).get("ret").getAsString(),JsonObject.class);
+						attendedReq.put(jsonIn.get("requestID").toString(), ret);
+						send(ret, clientAddress, clientPort);
+					}
+				}
+				else
+				{
+					ret = new Gson().fromJson((dispatcher.dispatch(jsonIn)).get("ret").getAsString(),JsonObject.class);
+					send(ret, clientAddress, clientPort);
+				}
+
+
+
+				System.out.println("test  " + Arrays.asList(attendedReq)); 
 
 				
-
-				//******************************** Add thread here*******************************************
-
-
-
-
-
-
-
-				JsonObject jsonIn = new Gson().fromJson(messageIn,JsonObject.class);
-				String requestID = jsonIn.get("requestID").getAsString();
-				String callSem = jsonIn.get("call-semantics").getAsString();
-				JsonObject ret = new Gson().fromJson((dispatcher.dispatch(messageIn)).get("ret").getAsString(),JsonObject.class);
-				ret.addProperty("requestID", requestID);
-				ret.addProperty("call-semantics", callSem);
-				//System.out.println(ret.toString());
-				// check credentials
-				try {
-					buffer = ret.toString().getBytes();
-				} catch(Exception e) {
-					e.printStackTrace();
-				}
-				// marshall json array to send back
-				outPacket = new DatagramPacket(buffer, buffer.length, clientAddress, clientPort);
-
-				// This section of code for sending the UDP packets
-				datagramSocket.send(outPacket);
-				numRequests++;
 				System.out.println("Successfully sent response back to client at address " + clientAddress + "\n");
 				System.out.println("******************************************************************* \n");
 			} while (true);
@@ -106,5 +111,27 @@ public class Server {
 			System.out.println("\n Closing connection...");
 			datagramSocket.close();
 		}
+	}
+
+
+	public static void send(JsonObject ret, InetAddress clientAddress, int clientPort)
+	{
+		try
+		{
+			buffer = ret.toString().getBytes();
+				// marshall json array to send back
+			outPacket = new DatagramPacket(buffer, buffer.length, clientAddress, clientPort);
+			datagramSocket.send(outPacket);
+
+		}
+		catch(IOException ioEx)
+		{
+			ioEx.printStackTrace();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+
 	}
 }
