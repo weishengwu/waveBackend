@@ -11,8 +11,6 @@ public class SignIn {
         userlist = ReadFile.loadJsonIntoUserList();
     }
     public String Login(String username, String password) throws Exception {
-        System.out.println("Entered username: " + username);
-        System.out.println("Entered password: " + password);
         try {
             User validUser = checkCredentials(username, password);
             JsonObject obj = new JsonObject();
@@ -23,6 +21,7 @@ public class SignIn {
                 JsonObject userJson = new Gson().fromJson(userString, JsonObject.class);
                 obj.add("user", userJson);
             }
+            System.out.println(obj.toString());
             return obj.toString();
         } 
         catch (Exception e) {

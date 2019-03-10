@@ -64,12 +64,10 @@ public class Server {
 				clientAddress = inPacket.getAddress();
 				clientPort = inPacket.getPort();
 
-				datagramSocket.receive(inPacket);
-
 				messageIn = new String(inPacket.getData(), 0, inPacket.getLength());
 				//System.out.println("Request #" + numRequests);
 				//System.out.println("Incoming client request from " + clientAddress + " at port " + clientPort);
-				//System.out.println("Message: " + messageIn);
+				System.out.println("Message: " + messageIn);
 				/* AT THIS POINT, MESSAGE HAS BEEN RECIEVED AND IS STORED IN "messageIn" */
 				JsonObject jsonIn = new Gson().fromJson(messageIn,JsonObject.class);
 
@@ -86,20 +84,20 @@ public class Server {
 					}
 					else
 					{
-						ret = new Gson().fromJson((dispatcher.dispatch(jsonIn)).get("ret").getAsString(),JsonObject.class);
+						ret = new Gson().fromJson((dispatcher.dispatch(messageIn)).get("ret").getAsString(),JsonObject.class);
 						attendedReq.put(jsonIn.get("requestID").toString(), ret);
 						send(ret, clientAddress, clientPort);
 					}
 				}
 				else
 				{
-					ret = new Gson().fromJson((dispatcher.dispatch(jsonIn)).get("ret").getAsString(),JsonObject.class);
+					ret = new Gson().fromJson((dispatcher.dispatch(messageIn)).get("ret").getAsString(),JsonObject.class);
 					send(ret, clientAddress, clientPort);
 				}
 
 
 
-				System.out.println("test  " + Arrays.asList(attendedReq)); 
+				//System.out.println("test  " + Arrays.asList(attendedReq)); 
 
 				
 				System.out.println("Successfully sent response back to client at address " + clientAddress + "\n");
@@ -118,6 +116,7 @@ public class Server {
 	{
 		try
 		{
+			System.out.println(ret.toString());
 			buffer = ret.toString().getBytes();
 				// marshall json array to send back
 			outPacket = new DatagramPacket(buffer, buffer.length, clientAddress, clientPort);
