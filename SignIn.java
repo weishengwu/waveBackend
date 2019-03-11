@@ -21,7 +21,6 @@ public class SignIn {
                 JsonObject userJson = new Gson().fromJson(userString, JsonObject.class);
                 obj.add("user", userJson);
             }
-            System.out.println(obj.toString());
             return obj.toString();
         } 
         catch (Exception e) {

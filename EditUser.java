@@ -40,4 +40,12 @@ public class EditUser {
         JsonObject userJson = new Gson().fromJson(userString, JsonObject.class);
         return userJson.toString();
     }
+    public String getUser(String uName) {
+        User user = userlist.getUser(uName);
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String userString = gson.toJson(user);
+        JsonObject userJson = new Gson().fromJson(userString, JsonObject.class);
+        return userJson.toString();
+
+    }
 }
