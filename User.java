@@ -31,6 +31,9 @@ public class User implements Serializable {
         public String get(int i) {
             return songIDs.get(i).getSongID();
         }
+        public String remove(int i) {
+            return songIDs.remove(i).getSongID();
+        }
         public ArrayList<String> getPlaylistSongIDs() {
             ArrayList<String> ret = new ArrayList<String>();
             for (Song s: songIDs) {
@@ -103,16 +106,13 @@ public class User implements Serializable {
         getPlaylist(pName).addSong(songID);
     }
     public String deleteSongFromPlaylist(String pName, String songID) {
-        Playlist p = null;
         for (int i = 0; i < listOfPlaylists.size(); i++) {
             if (listOfPlaylists.get(i).getPlaylistName().equals(pName)) {
-                p = listOfPlaylists.get(i);
-                break;
+                for (int j = 0; j < listOfPlaylists.get(i).getPlaylistSongIDs().size(); j++) {
+                    if (listOfPlaylists.get(i).getPlaylistSongIDs().get(j).equals(songID))
+                        return listOfPlaylists.get(i).remove(j);
+                }
             }
-        }
-        for (int j = 0; j < p.getPlaylistSongIDs().size(); j++) {
-            if (p.getPlaylistSongIDs().get(j).equals(songID))
-                return p.getPlaylistSongIDs().remove(j);
         }
         return null;
     }
