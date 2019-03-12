@@ -76,32 +76,39 @@ public class Server {
 				String callSemantic = new String((jsonIn).get("call-semantics").getAsString());
 
 
-				if(callSemantic.equals("at-most-one"))
-				{
-					if (attendedReq.containsKey(jsonIn.get("requestID").getAsString())) 
+				if (jsonIn.get("object").getAsString().equals("SongHandler")) {
+					String songID = jsonIn.get("param").getAsJsonObject().get("songID").getAsString();
+					Runnable r = new SongHandler(songID, clientAddress);
+					new Thread(r).start();
+				}
+				else {
+					if(callSemantic.equals("at-most-one"))
 					{
-						send(attendedReq.get(jsonIn.get("requestID").getAsString()), clientAddress, clientPort);
+						if (attendedReq.containsKey(jsonIn.get("requestID").getAsString())) 
+						{
+							send(attendedReq.get(jsonIn.get("requestID").getAsString()), clientAddress, clientPort);
+						}
+						else
+						{
+							ret = new Gson().fromJson((dispatcher.dispatch(messageIn)).get("ret").getAsString(),JsonObject.class);
+							attendedReq.put(jsonIn.get("requestID").toString(), ret);
+							send(ret, clientAddress, clientPort);
+						}
 					}
 					else
 					{
 						ret = new Gson().fromJson((dispatcher.dispatch(messageIn)).get("ret").getAsString(),JsonObject.class);
-						attendedReq.put(jsonIn.get("requestID").toString(), ret);
 						send(ret, clientAddress, clientPort);
 					}
+
+
+
+					//System.out.println("test  " + Arrays.asList(attendedReq)); 
+
+					
+					System.out.println("Successfully sent response back to client at address " + clientAddress + "\n");
+					System.out.println("******************************************************************* \n");
 				}
-				else
-				{
-					ret = new Gson().fromJson((dispatcher.dispatch(messageIn)).get("ret").getAsString(),JsonObject.class);
-					send(ret, clientAddress, clientPort);
-				}
-
-
-
-				//System.out.println("test  " + Arrays.asList(attendedReq)); 
-
-				
-				System.out.println("Successfully sent response back to client at address " + clientAddress + "\n");
-				System.out.println("******************************************************************* \n");
 			} while (true);
 		} catch (IOException ioEx) {
 			ioEx.printStackTrace();

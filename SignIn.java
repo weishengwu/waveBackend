@@ -11,6 +11,7 @@ public class SignIn {
         userlist = ReadFile.loadJsonIntoUserList();
     }
     public String Login(String username, String password) throws Exception {
+        userlist = ReadFile.loadJsonIntoUserList();
         try {
             User validUser = checkCredentials(username, password);
             JsonObject obj = new JsonObject();
@@ -30,6 +31,7 @@ public class SignIn {
     }
     
     public String SignUp(String username, String password) throws Exception {
+        userlist = ReadFile.loadJsonIntoUserList();
         try {
             boolean userExist = checkUserName(username);
             JsonObject obj = new JsonObject();
