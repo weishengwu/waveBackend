@@ -29,6 +29,8 @@ public class Server {
 		dispatcher.registerObject(musiclist, "MusicList");
 		EditUser editUser = new EditUser();
 		dispatcher.registerObject(editUser, "EditUser");
+		SongHandler songHandler = new SongHandler();
+		dispatcher.registerObject(songHandler, "SongHandler");
 
 
 		System.out.println("Opening Port...");

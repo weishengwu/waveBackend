@@ -29,7 +29,7 @@ public class SongDispatcher
     * @param fragment: The chunk corresponds to 
     * [fragment * FRAGMENT_SIZE, FRAGMENT_SIZE]
     */
-    public String getSongChunk(Long key, Long fragment) throws FileNotFoundException, IOException
+    public String getSongChunk(String key, Long fragment) throws FileNotFoundException, IOException
     {
         byte buf[] = new byte[FRAGMENT_SIZE];
 
@@ -46,7 +46,7 @@ public class SongDispatcher
     * getFileSize: Gets a size of the file
     * @param key: Song ID. Each song has a unique ID 
      */
-    public Integer getFileSize(Long key) throws FileNotFoundException, IOException
+    public Integer getFileSize(String key) throws FileNotFoundException, IOException
     {
         File file = new File("assets/" + "bluebird" + ".mp3");        
         Integer total =  (int)file.length();
