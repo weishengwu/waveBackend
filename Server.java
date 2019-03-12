@@ -64,51 +64,9 @@ public class Server {
 				clientAddress = inPacket.getAddress();
 				clientPort = inPacket.getPort();
 
-				messageIn = new String(inPacket.getData(), 0, inPacket.getLength());
-				//System.out.println("Request #" + numRequests);
-				//System.out.println("Incoming client request from " + clientAddress + " at port " + clientPort);
-				System.out.println("Message: " + messageIn);
-				/* AT THIS POINT, MESSAGE HAS BEEN RECIEVED AND IS STORED IN "messageIn" */
-				JsonObject jsonIn = new Gson().fromJson(messageIn,JsonObject.class);
-
-				JsonObject ret = null;
-
-				String callSemantic = new String((jsonIn).get("call-semantics").getAsString());
-
-
-				if (jsonIn.get("object").getAsString().equals("SongHandler")) {
-					String songID = jsonIn.get("param").getAsJsonObject().get("songID").getAsString();
-					Runnable r = new SongHandler(songID, clientAddress);
-					new Thread(r).start();
-				}
-				else {
-					if(callSemantic.equals("at-most-one"))
-					{
-						if (attendedReq.containsKey(jsonIn.get("requestID").getAsString())) 
-						{
-							send(attendedReq.get(jsonIn.get("requestID").getAsString()), clientAddress, clientPort);
-						}
-						else
-						{
-							ret = new Gson().fromJson((dispatcher.dispatch(messageIn)).get("ret").getAsString(),JsonObject.class);
-							attendedReq.put(jsonIn.get("requestID").toString(), ret);
-							send(ret, clientAddress, clientPort);
-						}
-					}
-					else
-					{
-						ret = new Gson().fromJson((dispatcher.dispatch(messageIn)).get("ret").getAsString(),JsonObject.class);
-						send(ret, clientAddress, clientPort);
-					}
-
-
-
-					//System.out.println("test  " + Arrays.asList(attendedReq)); 
-
-					
-					System.out.println("Successfully sent response back to client at address " + clientAddress + "\n");
-					System.out.println("******************************************************************* \n");
-				}
+				MyRunnable myRunnable = new MyRunnable(buffer, inPacket, clientAddress, clientPort);
+				Thread t = new Thread(myRunnable);
+				t.start();
 			} while (true);
 		} catch (IOException ioEx) {
 			ioEx.printStackTrace();
@@ -137,7 +95,59 @@ public class Server {
 		catch(Exception e) {
 			e.printStackTrace();
 		}
-		
+	}
 
+	public static class MyRunnable implements Runnable{
+		byte[] buffer;
+		DatagramPacket inPacket;
+		InetAddress clientAddress;
+		int clientPort;
+		String messageIn = "";
+
+		public MyRunnable(byte[] buffer, DatagramPacket inPacket, InetAddress clientAddress, int clientPort) {
+			this.buffer = buffer;
+			this.inPacket = inPacket;
+			this.clientAddress = clientAddress;
+			this.clientPort = clientPort;
+			messageIn =new String(inPacket.getData(), 0, inPacket.getLength());
+			// System.out.println("Request #" + numRequests);
+			// System.out.println("Incoming client request from " + clientAddress + " at
+			// port " + clientPort);
+			System.out.println("Message: " + messageIn);
+			/* AT THIS POINT, MESSAGE HAS BEEN RECIEVED AND IS STORED IN "messageIn" */;
+			// System.out.println("Request #" + numRequests);
+			// System.out.println("Incoming client request from " + clientAddress + " at
+			// port " + clientPort);
+			System.out.println("Message: " + messageIn);
+			/* AT THIS POINT, MESSAGE HAS BEEN RECIEVED AND IS STORED IN "messageIn" */
+		}
+
+		public void run() {
+			JsonObject jsonIn = new Gson().fromJson(messageIn, JsonObject.class);
+
+			JsonObject ret;
+
+			String callSemantic = new String((jsonIn).get("call-semantics").getAsString());
+
+			if (callSemantic.equals("at-most-one")) {
+				if (attendedReq.containsKey(jsonIn.get("requestID").getAsString())) {
+					send(attendedReq.get(jsonIn.get("requestID").getAsString()), clientAddress, clientPort);
+				} else {
+					ret = new Gson().fromJson((dispatcher.dispatch(messageIn)).get("ret").getAsString(),JsonObject.class);
+					attendedReq.put(jsonIn.get("requestID").toString(), ret);
+					send(ret, clientAddress, clientPort);
+				}
+			} else {
+				ret = new Gson().fromJson((dispatcher.dispatch(messageIn)).get("ret").getAsString(),JsonObject.class);
+				send(ret, clientAddress, clientPort);
+			}
+
+			// System.out.println("test " + Arrays.asList(attendedReq));
+			System.out.println(Thread.getAllStackTraces().keySet());
+			System.out.println("Successfully sent response back to client at address " + clientAddress + "\n");
+			System.out.println("***************************************************************** \n");
+		}
 	}
 }
+
+
