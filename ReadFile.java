@@ -34,9 +34,12 @@ public class ReadFile {
     */
     public static UserList loadJsonIntoUserList() {
         String path = "assets/users.json";
-        File file = new File(path);    
+        
+        //File file = new File(path);    
         try {
-            InputStream inputStream = new FileInputStream(file);
+            InputStream inputStream = DFS.read("users.json", 0);
+            inputStream.connect();
+            //InputStream inputStream = new FileInputStream(file);
             String myJson = inputStreamToString(inputStream);
             UserList userList = new Gson().fromJson(myJson, UserList.class);
             return userList;
