@@ -52,6 +52,6 @@ public class DFSCommand
             DFSCommand dfsCommand=new DFSCommand( Integer.parseInt(args[0]), 0);
         }
 
-        Server server = new Server(dfsCommand.dfs, PORT)
+        Server server = new Server(dfsCommand.dfs, PORT);
      } 
 }

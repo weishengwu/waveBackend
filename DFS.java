@@ -36,7 +36,7 @@ import java.util.*;
 public class DFS
 {
     
-
+    
     public class PagesJson
     {
         Long guid;
@@ -46,15 +46,54 @@ public class DFS
             
         }
         // getters
+        public Long getGUID() {
+            return guid;
+        }
+        public Long getSize() {
+            return size;
+        }
         // setters
+        public void setGUID(Long guid) {
+            this.guid = guid;
+        }
+        public void setSize(Long size) {
+            this.size = size;
+        }
     };
-
+    
     public class FileJson 
     {
         String name;
-        Long   size;
+        Long size;
         ArrayList<PagesJson> pages;
         public FileJson()
+        {
+            
+        }
+        // getters
+        public String getName() {
+            return name;
+        }
+        public Long getSize() {
+            return size;
+        }
+        public ArrayList<PagesJson> getPages() {
+            return pages;
+        }
+        // setters
+        public void setName(String name) {
+            this.name = name;
+        }
+        public void setSize(Long size) {
+            this.size = size;
+        }
+        // public void setPages()
+    };
+    
+    public class FilesJson 
+    {
+        List<FileJson> file;
+        public FilesJson() 
         {
             
         }
@@ -62,20 +101,9 @@ public class DFS
         // setters
     };
     
-    public class FilesJson 
-    {
-         List<FileJson> file;
-         public FilesJson() 
-         {
-             
-         }
-        // getters
-        // setters
-    };
-    
     
     int port;
-    Chord  chord;
+    Chord chord;
     
     
     private long md5(String objectName)
@@ -90,8 +118,8 @@ public class DFS
         }
         catch(NoSuchAlgorithmException e)
         {
-                e.printStackTrace();
-                
+            e.printStackTrace();
+            
         }
         return 0;
     }
@@ -115,11 +143,11 @@ public class DFS
         
     }
     
-  
-/**
- * Join the chord
-  *
- */
+    
+    /**
+    * Join the chord
+    *
+    */
     public void join(String Ip, int port) throws Exception
     {
         chord.joinRing(Ip, port);
@@ -127,28 +155,28 @@ public class DFS
     }
     
     
-   /**
- * leave the chord
-  *
- */ 
+    /**
+    * leave the chord
+    *
+    */ 
     public void leave() throws Exception
     {        
-       chord.leave();
+        chord.leave();
     }
-  
-   /**
- * print the status of the peer in the chord
-  *
- */
+    
+    /**
+    * print the status of the peer in the chord
+    *
+    */
     public void print() throws Exception
     {
         chord.print();
     }
     
-/**
- * readMetaData read the metadata from the chord
-  *
- */
+    /**
+    * readMetaData read the metadata from the chord
+    *
+    */
     public FilesJson readMetaData() throws Exception
     {
         FilesJson filesJson = null;
@@ -170,10 +198,10 @@ public class DFS
         return filesJson;
     }
     
-/**
- * writeMetaData write the metadata back to the chord
-  *
- */
+    /**
+    * writeMetaData write the metadata back to the chord
+    *
+    */
     public void writeMetaData(FilesJson filesJson) throws Exception
     {
         long guid = md5("Metadata");
@@ -182,88 +210,88 @@ public class DFS
         Gson gson = new Gson();
         peer.put(guid, gson.toJson(filesJson));
     }
-   
-/**
- * Change Name
-  *
- */
+    
+    /**
+    * Change Name
+    *
+    */
     public void move(String oldName, String newName) throws Exception
     {
         // TODO:  Change the name in Metadata
         // Write Metadata
     }
-
-  
-/**
- * List the files in the system
-  *
- * @param filename Name of the file
- */
+    
+    
+    /**
+    * List the files in the system
+    *
+    * @param filename Name of the file
+    */
     public String lists() throws Exception
     {
         String listOfFiles = "";
- 
+        
         return listOfFiles;
     }
-
-/**
- * create an empty file 
-  *
- * @param filename Name of the file
- */
+    
+    /**
+    * create an empty file 
+    *
+    * @param filename Name of the file
+    */
     public void create(String fileName) throws Exception
     {
-         // TODO: Create the file fileName by adding a new entry to the Metadata
+        // TODO: Create the file fileName by adding a new entry to the Metadata
         // Write Metadata
-
+        
         
         
     }
     
-/**
- * delete file 
-  *
- * @param filename Name of the file
- */
+    /**
+    * delete file 
+    *
+    * @param filename Name of the file
+    */
     public void delete(String fileName) throws Exception
     {
-     
+        
         
     }
     
-/**
- * Read block pageNumber of fileName 
-  *
- * @param filename Name of the file
- * @param pageNumber number of block. 
- */
+    /**
+    * Read block pageNumber of fileName 
+    *
+    * @param filename Name of the file
+    * @param pageNumber number of block. 
+    */
     public RemoteInputFileStream read(String fileName, int pageNumber) throws Exception
     {
         return null;
     }
     
- /**
- * Add a page to the file                
-  *
- * @param filename Name of the file
- * @param data RemoteInputStream. 
- */
+    /**
+    * Add a page to the file                
+    *
+    * @param filename Name of the file
+    * @param data RemoteInputStream. 
+    */
     public void append(String filename, RemoteInputFileStream data) throws Exception
     {
         
     }
-
-
- /**
- * Add a page to the file                
-  *
- * @param filename Name of the file
- * @param data RemoteInputStream. 
- */
-public void write(String filename, RemoteInputFileStream data) throws Exception
-{
     
-}
+    
+    /**
+    * Add a page to the file                
+    *
+    * @param filename Name of the file
+    * @param data RemoteInputStream. 
+    */
+    public void write(String filename, RemoteInputFileStream data) throws Exception
+    {
+        
+    }
     
 }
 
