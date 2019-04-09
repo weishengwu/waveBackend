@@ -43,7 +43,8 @@ public class DFS
         Long size;
         public PagesJson()
         {
-            
+            guid = (long)-1;
+            size = (long)0;
         }
         // getters
         public Long getGUID() {
@@ -68,7 +69,9 @@ public class DFS
         ArrayList<PagesJson> pages;
         public FileJson()
         {
-            
+            name = "empty";
+            size = (long)0;
+            pages = new ArrayList<PagesJson>();
         }
         // getters
         public String getName() {
@@ -80,6 +83,12 @@ public class DFS
         public ArrayList<PagesJson> getPages() {
             return pages;
         }
+        public PagesJson getPage(int i) {
+            return pages.get(i);
+        }
+        public int getNumPages() {
+            return pages.size();
+        }
         // setters
         public void setName(String name) {
             this.name = name;
@@ -87,7 +96,19 @@ public class DFS
         public void setSize(Long size) {
             this.size = size;
         }
-        // public void setPages()
+        public void setPages(ArrayList<PagesJson> pages) {
+            this.pages = new ArrayList<PagesJson>();
+			for (int i = 0; i < pages.size(); i++) {
+				this.pages.add(pages.get(i));
+			}
+        }
+        public void addPage(Long guid, Long pageSize) {
+            PagesJson newPage = new PagesJson();
+            newPage.setGUID(guid);
+            newPage.setSize(pageSize);
+            pages.add(newPage);
+            size += pageSize;
+        }
     };
     
     public class FilesJson 
@@ -95,10 +116,29 @@ public class DFS
         List<FileJson> file;
         public FilesJson() 
         {
-            
+            file = new ArrayList<FileJson>();
         }
         // getters
+        public FileJson getFile(int i) {
+            return file.get(i);
+        }
+        public int getSize() {
+            return file.size();
+        }
         // setters
+        public void addFile(FileJson fileToAdd) {
+            file.add(fileToAdd);
+        }
+        //deleter
+        public boolean deleteFile(String filename) {
+            for (int i = 0; i < file.size(); i++) {
+				if (file.get(i).getName().equals(filename)) {
+                    file.remove(i);
+                    return true;
+				}
+            }
+            return false;
+        }
     };
     
     
@@ -220,6 +260,9 @@ public class DFS
         // TODO:  Change the name in Metadata
         // Write Metadata
     }
+
+    
+    //WRITEPAGEDATA MIGHT BE NEEDED****************************************************************************************************************************************
     
     
     /**
@@ -230,7 +273,16 @@ public class DFS
     public String lists() throws Exception
     {
         String listOfFiles = "";
+
+        FilesJson files = readMetaData();
+        for (int i = 0; i < files.getSize(); i++) {
+			listOfFiles += files.getFile(i).getName() + "\n";
+		}
         
+        if (files.getSize() == 0) {
+			return "Empty DFS";
+		}
+
         return listOfFiles;
     }
     
@@ -255,7 +307,26 @@ public class DFS
     */
     public void delete(String fileName) throws Exception
     {
-        
+        FilesJson metadata = readMetaData();
+		FileJson file = new FileJson();
+
+		// find file
+		for (int i = 0; i < metadata.getSize(); i++) {
+			if (metadata.getFile(i).getName().equals(fileName)) {
+				file = metadata.getFile(i);
+
+				// delete all pages of file
+				for (int j = 0; j < file.getNumPages() - 1; j++) {
+					Long guid = file.getPage(j).getGUID();
+					ChordMessageInterface peer = chord.locateSuccessor(guid);
+					peer.delete(guid);
+				}
+
+				metadata.deleteFile(fileName);
+				writeMetaData(metadata);
+				return;
+			}
+		}
         
     }
     
@@ -267,7 +338,20 @@ public class DFS
     */
     public RemoteInputFileStream read(String fileName, int pageNumber) throws Exception
     {
-        return null;
+        FilesJson metadata = readMetaData();
+		long guid = (long) -1;
+
+		for (int i = 0; i < metadata.getSize(); i++) {
+			FileJson filejson = metadata.getFile(i);
+
+            if (filejson.getName().equals(fileName)) {
+				guid = filejson.getPage(pageNumber).getGUID();
+				break;
+			}
+		}
+
+		ChordMessageInterface peer = chord.locateSuccessor(guid);
+		return peer.get(guid);
     }
     
     /**
@@ -278,7 +362,17 @@ public class DFS
     */
     public void append(String filename, RemoteInputFileStream data) throws Exception
     {
-        
+		Long guid = md5(filename + System.currentTimeMillis());
+
+		FilesJson metadata = readMetaData();
+
+        // add data to page
+		// TODO*******************************************************************************************************************************************************
+
+		// locate peer
+		ChordMessageInterface peer = chord.locateSuccessor(guid);
+
+		peer.put(guid, data);
     }
     
     
