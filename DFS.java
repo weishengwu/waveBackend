@@ -404,7 +404,26 @@ public class DFS
     */
     public void delete(String fileName) throws Exception
     {
-        
+        FilesJson metadata = readMetaData();
+		FileJson file = new FileJson();
+
+		// find file
+		for (int i = 0; i < metadata.getSize(); i++) {
+			if (metadata.getFile(i).getName().equals(fileName)) {
+				file = metadata.getFile(i);
+
+				// delete all pages of file
+				for (int j = 0; j < file.getNumPages() - 1; j++) {
+					Long guid = file.getPage(j).getGUID();
+					ChordMessageInterface peer = chord.locateSuccessor(guid);
+					peer.delete(guid);
+				}
+
+				metadata.deleteFile(fileName);
+				writeMetaData(metadata);
+				return;
+			}
+		}
         
     }
     
@@ -416,7 +435,20 @@ public class DFS
     */
     public RemoteInputFileStream read(String fileName, int pageNumber) throws Exception
     {
-        return null;
+        FilesJson metadata = readMetaData();
+		long guid = (long) -1;
+
+		for (int i = 0; i < metadata.getSize(); i++) {
+			FileJson filejson = metadata.getFile(i);
+
+            if (filejson.getName().equals(fileName)) {
+				guid = filejson.getPage(pageNumber).getGUID();
+				break;
+			}
+		}
+
+		ChordMessageInterface peer = chord.locateSuccessor(guid);
+		return peer.get(guid);
     }
     
     /**
@@ -427,7 +459,17 @@ public class DFS
     */
     public void append(String filename, RemoteInputFileStream data) throws Exception
     {
-        
+		Long guid = md5(filename + System.currentTimeMillis());
+
+		FilesJson metadata = readMetaData();
+
+        // add data to page
+		// TODO*******************************************************************************************************************************************************
+
+		// locate peer
+		ChordMessageInterface peer = chord.locateSuccessor(guid);
+
+		peer.put(guid, data);
     }
     
     
