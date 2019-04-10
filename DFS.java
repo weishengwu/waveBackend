@@ -39,72 +39,219 @@ public class DFS
     
     public class PagesJson
     {
+        // Long guid;
+        // Long size;
+        // public PagesJson()
+        // {
+        //     guid = (long) 0;
+        //     size = (long) 0;
+        // }
+        // // getters
+        // public Long getGUID() {
+        //     return guid;
+        // }
+        // public Long getSize() {
+        //     return size;
+        // }
+        // // setters
+        // public void setGUID(Long guid) {
+        //     this.guid = guid;
+        // }
+        // public void setSize(Long size) {
+        //     this.size = size;
+        // }
         Long guid;
-        Long size;
+        int size;
         public PagesJson()
         {
-            
+            guid = (long) 0;
+            size = 0;
         }
+
         // getters
-        public Long getGUID() {
+        public Long getGUID()
+        {
             return guid;
         }
-        public Long getSize() {
+
+        public int getSize()
+        {
             return size;
         }
+
         // setters
-        public void setGUID(Long guid) {
+        public void setGUID(Long guid)
+        {
             this.guid = guid;
         }
-        public void setSize(Long size) {
+        public void setSize(int size)
+        {
             this.size = size;
         }
     };
     
     public class FileJson 
     {
+        // String name;
+        // Long size;
+        // ArrayList<PagesJson> pages;
+        // public FileJson()
+        // {
+            
+        // }
+        // // getters
+        // public String getName() {
+        //     return name;
+        // }
+        // public Long getSize() {
+        //     return size;
+        // }
+        // public ArrayList<PagesJson> getPages() {
+        //     return pages;
+        // }
+        // // setters
+        // public void setName(String name) {
+        //     this.name = name;
+        // }
+        // public void setSize(Long size) {
+        //     this.size = size;
+        // }
+        // // public void setPages()
         String name;
-        Long size;
+        Long   size;
+        int   numberOfItems;
+        int   itemsPerPage;
         ArrayList<PagesJson> pages;
         public FileJson()
         {
-            
+            this.name = "not set";
+            this.size = (long) 0;
+            this.numberOfItems = 0;
+            this.itemsPerPage =  0;
+            this.pages = new ArrayList<PagesJson>();
         }
         // getters
-        public String getName() {
-            return name;
+        public String getName()
+        {
+            return this.name;
         }
-        public Long getSize() {
-            return size;
+        public Long getSize()
+        {
+            return this.size;
         }
-        public ArrayList<PagesJson> getPages() {
-            return pages;
+        public int getNumberOfItems()
+        {
+            return this.numberOfItems;
         }
+        public int getItemsPerPage()
+        {
+            return this.itemsPerPage;
+        }
+         public int getNumberOfPages()
+        {
+            return this.pages.size();
+        }
+        public ArrayList<PagesJson> getPages()
+        {
+            return this.pages;
+        } 
+        public PagesJson getPage(int i)
+        {
+            return pages.get(i);
+        }
+
+
         // setters
-        public void setName(String name) {
+        public void setName(String name)
+        {
             this.name = name;
         }
-        public void setSize(Long size) {
+        public void setSize(Long size)
+        {
             this.size = size;
         }
-        // public void setPages()
+        public void setPages(ArrayList<PagesJson> pages)
+        {
+            this.pages = new ArrayList<PagesJson>(); 
+        	for(int i = 0 ; i < pages.size(); i++)
+        	{
+        		this.pages.add(pages.get(i));
+        	}
+        } 
+        public void addPage(PagesJson page)
+        {
+            this.pages.add(page);
+            this.size += page.getSize();
+        }
+		public void addPage(Long guid, int page_size)
+        {
+            PagesJson page = new PagesJson();		//metadata
+            page.setGUID(guid);         			//metadata
+            page.setSize(page_size);    			//metadata
+
+            this.addPage(page);
+        }
     };
     
     public class FilesJson 
     {
-        List<FileJson> file;
-        public FilesJson() 
-        {
+        // List<FileJson> file;
+        // Long size;
+        // public FilesJson() 
+        // {
             
-        }
+        // }
+        
+        // // getters
+        // public Long getSize(){
+        //     return file.size();
+        // }
+        
+        // // setters
+        // public void setSize(Long size)
+        // {
+        //     this.size = size;
+        // }
+        List<FileJson> files;
+         public FilesJson() 
+         {
+             files = new ArrayList<FileJson>();
+         }
+
         // getters
+         public FileJson getFile(int i)
+         {
+            return this.files.get(i);
+         }
+
         // setters
+         public void addFile(FileJson file)
+         {
+            this.files.add(file);
+         }
+
+         public int size()
+         {
+            return files.size();
+         }
+
+         public void deleteFile(String fileName)
+         {
+         	int index_to_remove = 0;
+         	for(int i = 0 ; i < files.size(); i++)
+         	{
+         		if(files.get(i).getName().equals(fileName))
+         		{
+					index_to_remove = i;
+         		}
+         	}
+
+         	files.remove(index_to_remove);
+         }
     };
-    
     
     int port;
     Chord chord;
-    
     
     private long md5(String objectName)
     {
@@ -124,8 +271,6 @@ public class DFS
         return 0;
     }
     
-    
-    
     public DFS(int port) throws Exception
     {
         
@@ -143,7 +288,6 @@ public class DFS
         
     }
     
-    
     /**
     * Join the chord
     *
@@ -153,7 +297,6 @@ public class DFS
         chord.joinRing(Ip, port);
         chord.print();
     }
-    
     
     /**
     * leave the chord
@@ -220,8 +363,7 @@ public class DFS
         // TODO:  Change the name in Metadata
         // Write Metadata
     }
-    
-    
+      
     /**
     * List the files in the system
     *
@@ -230,7 +372,14 @@ public class DFS
     public String lists() throws Exception
     {
         String listOfFiles = "";
-        
+        FilesJson files = readMetaData();
+        for(int i = 0 ; i < files.size(); i++)
+        {
+            listOfFiles += files.getFile(i).name + "\n";
+        }
+
+        //System.out.println(TAG + ":files.size() == " + files.size());//DEBUG
+        if(files.size() == 0 ){return "Empty";}
         return listOfFiles;
     }
     
