@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.Scanner;
+import com.google.gson.*;
 
 //import DFS.FileJson;
 //import DFS.FilesJson;
@@ -19,8 +20,11 @@ public class DFSCommand {
 
 		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
 		String line = buffer.readLine();
-		while (!line.equals("quit")) {
+		// System.out.println("Result " +result);
+		// while (!line.contains("quit")) {
+		while(true) {
 			String[] result = line.split("\\s");
+			System.out.println("Result " +line);
 			if (result[0].equals("join") && result.length > 1) {
 				dfs.join("127.0.0.1", Integer.parseInt(result[1]));
 			}
@@ -134,7 +138,7 @@ public class DFSCommand {
 				}
 				
 				//TODO: make sure get correct file based on music and users
-				int pageNumber = dfs.readMetaData().getFile(index).getNumberOfPages()-1;
+				int pageNumber = dfs.readMetaData().getFile(index).getNumPages()-1;
 				System.out.println("reading page #" + pageNumber);
 
 				//Remote Input File Stream

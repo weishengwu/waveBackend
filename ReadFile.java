@@ -9,15 +9,26 @@ import com.google.gson.JsonObject;
 import com.google.gson.GsonBuilder;
 
 public class ReadFile {
+    DFS dfs;
+
+    public ReadFile() throws Exception {
+        dfs = new DFS(90);
+    }
     /**
      * Loads the music from the music.json file into musicList object using GSON
      * @return the populated music list
      */
-    public static MusicList loadJsonIntoMusicList() {
+    /**
+     * Loads the music from the music.json file into musicList object using GSON
+     * @return the populated music list
+     */
+    public MusicList loadJsonIntoMusicList() {
         String path = "assets/music.json";
-        File file = new File(path);    
+        //File file = new File(path);    
         try {
-            InputStream inputStream = new FileInputStream(file);
+            //InputStream inputStream = new FileInputStream(file);
+            RemoteInputFileStream inputStream = dfs.read("music.json", 0);
+            inputStream.connect();
             String myJson = inputStreamToString(inputStream);
             MusicList musicList  = new Gson().fromJson(myJson, MusicList.class);
             return musicList;
@@ -25,6 +36,10 @@ public class ReadFile {
         catch (IOException e) {
             return null;
         }
+        catch (Exception exc) {
+            System.out.println("In RF loadMusic" + exc);
+        }
+        return null;
     }
 
     /**
@@ -32,12 +47,12 @@ public class ReadFile {
     *
     * @return the populated user list
     */
-    public static UserList loadJsonIntoUserList() {
+    public UserList loadJsonIntoUserList() {
         String path = "assets/users.json";
         
         //File file = new File(path);    
         try {
-            InputStream inputStream = DFS.read("users.json", 0);
+            RemoteInputFileStream inputStream = dfs.read("users.json", 0);
             inputStream.connect();
             //InputStream inputStream = new FileInputStream(file);
             String myJson = inputStreamToString(inputStream);
@@ -46,8 +61,13 @@ public class ReadFile {
         } catch (IOException e) {
             return null;
         }
+        catch (Exception exc) {
+            System.out.println("In RF loadUser" + exc);
+        }
+
+        return null;
     }
-    public static void writeUserListToJson(UserList userlist) {
+    public void writeUserListToJson(UserList userlist) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String strJson = gson.toJson(userlist);
         
@@ -69,7 +89,7 @@ public class ReadFile {
     * @param inputStream a file to read from
     * @return a string of the read in file
     */
-    public static String inputStreamToString(InputStream inputStream) {
+    public String inputStreamToString(InputStream inputStream) {
         try {
             byte[] bytes = new byte[inputStream.available()];
             inputStream.read(bytes, 0, bytes.length);

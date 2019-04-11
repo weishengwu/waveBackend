@@ -16,8 +16,9 @@ public class Server {
 	private static SignIn login;
 	private static HashMap<String,JsonObject> attendedReq;
 	private static Dispatcher dispatcher;
+	private static ReadFile readfile;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		attendedReq = new HashMap<String,JsonObject>();		//Hashmap of current requests
 		dispatcher = new Dispatcher();						//Dispatcher
 		
@@ -25,7 +26,7 @@ public class Server {
 		//register objects and methods here
 		SignIn signIn = new SignIn();
 		dispatcher.registerObject(signIn, "SignIn");
-		MusicList musiclist = ReadFile.loadJsonIntoMusicList();
+		MusicList musiclist = readfile.loadJsonIntoMusicList();
 		dispatcher.registerObject(musiclist, "MusicList");
 		EditUser editUser = new EditUser();
 		dispatcher.registerObject(editUser, "EditUser");
