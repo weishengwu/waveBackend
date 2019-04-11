@@ -27,7 +27,7 @@ public class ReadFile {
         catch (Exception e) {
             e.printStackTrace();
         }
-        String path = "assets/music.json";
+        // String path = "assets/music.json";
         MusicList musicList = new MusicList();
         //File file = new File(path);    
         try {
