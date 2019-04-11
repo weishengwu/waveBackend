@@ -28,6 +28,11 @@ public class MusicList implements Serializable{
     public void addSong(Music m) {
         list.add(m);
     }
+    public void addSongs(MusicList m) {
+        for(int i = 0; i < m.size(); i++) {
+            list.add(m.get(i));
+        }
+    }
     public Music getSong(String id) {
         for(int i = 0; i < list.size(); i++) {
             if(list.get(i).getSongID().equals(id))

@@ -21,6 +21,7 @@ public class Server {
 	public static void main(String[] args) throws Exception {
 		attendedReq = new HashMap<String,JsonObject>();		//Hashmap of current requests
 		dispatcher = new Dispatcher();						//Dispatcher
+		readfile = new ReadFile();
 		
 		
 		//register objects and methods here
@@ -32,7 +33,6 @@ public class Server {
 		dispatcher.registerObject(editUser, "EditUser");
 		SongHandler songHandler = new SongHandler();
 		dispatcher.registerObject(songHandler, "SongHandler");
-
 
 		System.out.println("Opening Port...");
 		// Attempt to start server

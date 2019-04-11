@@ -4,35 +4,35 @@ import com.google.gson.GsonBuilder;
 
 public class EditUser {
     private UserList userlist;
-    private ReadFile readfile;
+    // private ReadFile readfile;
     public EditUser() throws Exception {
-        readfile = new ReadFile();
-        userlist = readfile.loadJsonIntoUserList();
+        // readfile = new ReadFile(12345);
+        userlist = ReadFile.loadJsonIntoUserList();
     }
     public void refreshUserList() {
-        userlist = readfile.loadJsonIntoUserList();
+        userlist = ReadFile.loadJsonIntoUserList();
     }
     public String addPlaylist(String uName, String pName) {
         userlist.addPlaylist(uName, pName);
-        readfile.writeUserListToJson(userlist);
+        ReadFile.writeUserListToJson(userlist);
         refreshUserList();
         return returnUpdatedUser(userlist.getUser(uName));
     }
     public String deletePlaylist(String uName, String pName) {
         userlist.deletePlaylist(uName, pName);
-        readfile.writeUserListToJson(userlist);
+        ReadFile.writeUserListToJson(userlist);
         refreshUserList();
         return returnUpdatedUser(userlist.getUser(uName));
     }
     public String addSongToPlaylist(String uName, String pName, String sID) {
         userlist.addSongToPlaylist(uName, pName, sID);
-        readfile.writeUserListToJson(userlist);
+        ReadFile.writeUserListToJson(userlist);
         refreshUserList();
         return returnUpdatedUser(userlist.getUser(uName));
     }
     public String deleteSongFromPlaylist(String uName, String pName, String sID) {
         userlist.deleteSongFromPlaylist(uName, pName, sID);
-        readfile.writeUserListToJson(userlist);
+        ReadFile.writeUserListToJson(userlist);
         refreshUserList();
         return returnUpdatedUser(userlist.getUser(uName));
     }

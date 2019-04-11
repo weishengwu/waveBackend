@@ -146,7 +146,7 @@ public class DFS
     Chord chord;
     
     
-    private long md5(String objectName)
+    private static long md5(String objectName)
     {
         try
         {
@@ -318,55 +318,55 @@ public class DFS
 
         try {
         	writeMetaData(metadata);
+	        if(fileName.contains("music")) {
+		        String path = "assets/music.json";
+		        File file = new File(path);   
+		        InputStream inputStream = new FileInputStream(file);
+				String myJson = inputStreamToString(inputStream);
+		        MusicList musicList  = new Gson().fromJson(myJson, MusicList.class);
+
+		        final int MUSIC_PER_PAGE = 100;
+
+		        MusicList writeTemp = new MusicList();
+		        for(int i = 0; i < musicList.size(); i++) {
+		        	writeTemp.addSong(musicList.get(i));
+
+		        	if((i+1) % MUSIC_PER_PAGE == 0 || i == musicList.size()-1) {
+		        		JsonObject musicJson = new Gson().fromJson(new Gson().toJson(writeTemp), JsonObject.class);
+		        		String musicListWrite = musicJson.toString();
+		        		//write file here
+		        		new Gson().toJson(musicJson, new FileWriter("assets/temp" + i + ".json"));
+		        		//append here
+		        		RemoteInputFileStream appendStream = new RemoteInputFileStream("assets/temp" + i + ".json");
+		        		append(fileName, appendStream);
+				  		writeTemp = new MusicList();
+		        	}
+		        }
+
+	    	}
+	    	else if (fileName.contains("user")) {
+	    		String path = "assets/music.json";
+		        File file = new File(path);   
+		        InputStream inputStream = new FileInputStream(file);
+				String myJson = inputStreamToString(inputStream);
+				UserList userList = new Gson().fromJson(myJson, UserList.class);
+			    JsonObject userJson = new Gson().fromJson(new Gson().toJson(userList), JsonObject.class);
+	    		String userListWrite = userJson.toString();
+	    		//write file here
+	    		new Gson().toJson(userJson, new FileWriter("assets/temp.json"));
+	    		//append here
+	    		RemoteInputFileStream appendStream = new RemoteInputFileStream("assets/temp.json");
+	    		append(fileName, appendStream);
+	    	}
+	    	else {
+	    		System.out.println("Command Failed!");
+	    		return;
+	    	}
         }
         catch(Exception e)
         {
         	e.printStackTrace(); 
         }
-        /*if(fileName.contains("music")) {
-	        String path = "assets/music.json";
-	        File file = new File(path);   
-	        InputStream inputStream = new FileInputStream(file);
-			String myJson = inputStreamToString(inputStream);
-	        MusicList musicList  = new Gson().fromJson(myJson, MusicList.class);
-
-	        final int MUSIC_PER_PAGE = 100;
-
-	        MusicList writeTemp = new MusicList();
-	        for(int i = 0; i < musicList.size(); i++) {
-	        	writeTemp.addSong(musicList.get(i));
-
-	        	if((i+1) % MUSIC_PER_PAGE == 0 || i == musicList.size()-1) {
-	        		JsonObject musicJson = new Gson().fromJson(new Gson().toJson(writeTemp), JsonObject.class);
-	        		String musicListWrite = musicJson.toString();
-	        		//write file here
-	        		new Gson().toJson(musicJson, new FileWriter("assets/temp" + i + ".json"));
-	        		//append here
-	        		RemoteInputFileStream appendStream = new RemoteInputFileStream("assets/temp" + i + ".json");
-	        		append(fileName, appendStream);
-			  		writeTemp = new MusicList();
-	        	}
-	        }
-
-    	}
-    	else if (fileName.contains("user")) {
-    		String path = "assets/music.json";
-	        File file = new File(path);   
-	        InputStream inputStream = new FileInputStream(file);
-			String myJson = inputStreamToString(inputStream);
-			UserList userList = new Gson().fromJson(myJson, UserList.class);
-		    JsonObject userJson = new Gson().fromJson(new Gson().toJson(userList), JsonObject.class);
-    		String userListWrite = userJson.toString();
-    		//write file here
-    		new Gson().toJson(userJson, new FileWriter("assets/temp.json"));
-    		//append here
-    		RemoteInputFileStream appendStream = new RemoteInputFileStream("assets/temp.json");
-    		append(fileName, appendStream);
-    	}
-    	else {
-    		System.out.println("Command Failed!");
-    		return;
-    	}*/
         System.out.println("Successfully added " + fileName + " to the metadata");
     }
     
@@ -419,7 +419,6 @@ public class DFS
 				break;
 			}
 		}
-
 		ChordMessageInterface peer = chord.locateSuccessor(guid);
 		return peer.get(guid);
     }

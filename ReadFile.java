@@ -9,11 +9,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.GsonBuilder;
 
 public class ReadFile {
-    DFS dfs;
-
-    public ReadFile() throws Exception {
-        dfs = new DFS(90);
-    }
+    static DFS dfs;
     /**
      * Loads the music from the music.json file into musicList object using GSON
      * @return the populated music list
@@ -22,15 +18,29 @@ public class ReadFile {
      * Loads the music from the music.json file into musicList object using GSON
      * @return the populated music list
      */
-    public MusicList loadJsonIntoMusicList() {
+    public static MusicList loadJsonIntoMusicList() {
+        try {
+            if (dfs==null){
+                dfs = new DFS(12345);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
         String path = "assets/music.json";
+        MusicList musicList = new MusicList();
         //File file = new File(path);    
         try {
             //InputStream inputStream = new FileInputStream(file);
-            RemoteInputFileStream inputStream = dfs.read("music.json", 0);
-            inputStream.connect();
-            String myJson = inputStreamToString(inputStream);
-            MusicList musicList  = new Gson().fromJson(myJson, MusicList.class);
+            for(int i = 0; i < 80; i++) {
+                RemoteInputFileStream inputStream = dfs.read("music.json", i);
+                inputStream.connect();
+                String myJson = inputStreamToString(inputStream);
+                System.out.println("TAG: " +myJson);
+                MusicList tempList  = new Gson().fromJson(myJson, MusicList.class);
+                System.out.println(tempList);
+                musicList.addSongs(tempList);
+            }
             return musicList;
         }
         catch (IOException e) {
@@ -47,7 +57,15 @@ public class ReadFile {
     *
     * @return the populated user list
     */
-    public UserList loadJsonIntoUserList() {
+    public static UserList loadJsonIntoUserList() {
+        try {
+            if (dfs==null){
+                dfs = new DFS(12345);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
         String path = "assets/users.json";
         
         //File file = new File(path);    
@@ -67,7 +85,16 @@ public class ReadFile {
 
         return null;
     }
-    public void writeUserListToJson(UserList userlist) {
+
+    public static void writeUserListToJson(UserList userlist) {
+        try {
+            if (dfs==null){
+                dfs = new DFS(12345);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String strJson = gson.toJson(userlist);
         
@@ -89,7 +116,15 @@ public class ReadFile {
     * @param inputStream a file to read from
     * @return a string of the read in file
     */
-    public String inputStreamToString(InputStream inputStream) {
+    public static String inputStreamToString(InputStream inputStream) {
+        try {
+            if (dfs==null){
+                dfs = new DFS(12345);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
         try {
             byte[] bytes = new byte[inputStream.available()];
             inputStream.read(bytes, 0, bytes.length);

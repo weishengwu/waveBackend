@@ -4,17 +4,17 @@ import com.google.gson.GsonBuilder;
 
 public class SignIn {
     UserList userlist;   
-    ReadFile readfile; 
+    // ReadFile readfile; 
     public SignIn() throws Exception{
-        readfile = new ReadFile();
-        userlist = readfile.loadJsonIntoUserList();
+        // readfile = new ReadFile();
+        userlist = ReadFile.loadJsonIntoUserList();
 
     }
     public void refreshUserList() {
-        userlist = readfile.loadJsonIntoUserList();
+        userlist = ReadFile.loadJsonIntoUserList();
     }
     public String Login(String username, String password) throws Exception {
-        userlist = readfile.loadJsonIntoUserList();
+        userlist = ReadFile.loadJsonIntoUserList();
         try {
             User validUser = checkCredentials(username, password);
             JsonObject obj = new JsonObject();
@@ -34,7 +34,7 @@ public class SignIn {
     }
     
     public String SignUp(String username, String password) throws Exception {
-        userlist = readfile.loadJsonIntoUserList();
+        userlist = ReadFile.loadJsonIntoUserList();
         try {
             boolean userExist = checkUserName(username);
             JsonObject obj = new JsonObject();
@@ -85,7 +85,7 @@ public class SignIn {
     public void addUser(String name, String password) {
         User newUser = new User(name, password);        
         userlist.addToList(newUser);
-        readfile.writeUserListToJson(userlist);
+        ReadFile.writeUserListToJson(userlist);
     }
     
     
