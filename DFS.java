@@ -5,7 +5,7 @@ import java.io.*;
 import java.nio.file.*;
 import java.math.BigInteger;
 import java.security.*;
-import com.google.gson.Gson;
+import com.google.gson.*;
 import java.io.InputStream;
 import java.util.*;
 
@@ -39,219 +39,112 @@ public class DFS
     
     public class PagesJson
     {
-        // Long guid;
-        // Long size;
-        // public PagesJson()
-        // {
-        //     guid = (long) 0;
-        //     size = (long) 0;
-        // }
-        // // getters
-        // public Long getGUID() {
-        //     return guid;
-        // }
-        // public Long getSize() {
-        //     return size;
-        // }
-        // // setters
-        // public void setGUID(Long guid) {
-        //     this.guid = guid;
-        // }
-        // public void setSize(Long size) {
-        //     this.size = size;
-        // }
         Long guid;
-        int size;
+        Long size;
         public PagesJson()
         {
-            guid = (long) 0;
-            size = 0;
+            guid = (long)-1;
+            size = (long)0;
         }
-
         // getters
-        public Long getGUID()
-        {
+        public Long getGUID() {
             return guid;
         }
-
-        public int getSize()
-        {
+        public Long getSize() {
             return size;
         }
-
         // setters
-        public void setGUID(Long guid)
-        {
+        public void setGUID(Long guid) {
             this.guid = guid;
         }
-        public void setSize(int size)
-        {
+        public void setSize(Long size) {
             this.size = size;
         }
     };
     
     public class FileJson 
     {
-        // String name;
-        // Long size;
-        // ArrayList<PagesJson> pages;
-        // public FileJson()
-        // {
-            
-        // }
-        // // getters
-        // public String getName() {
-        //     return name;
-        // }
-        // public Long getSize() {
-        //     return size;
-        // }
-        // public ArrayList<PagesJson> getPages() {
-        //     return pages;
-        // }
-        // // setters
-        // public void setName(String name) {
-        //     this.name = name;
-        // }
-        // public void setSize(Long size) {
-        //     this.size = size;
-        // }
-        // // public void setPages()
         String name;
-        Long   size;
-        int   numberOfItems;
-        int   itemsPerPage;
+        Long size;
         ArrayList<PagesJson> pages;
         public FileJson()
         {
-            this.name = "not set";
-            this.size = (long) 0;
-            this.numberOfItems = 0;
-            this.itemsPerPage =  0;
-            this.pages = new ArrayList<PagesJson>();
+            name = "empty";
+            size = (long)0;
+            pages = new ArrayList<PagesJson>();
         }
         // getters
-        public String getName()
-        {
-            return this.name;
+        public String getName() {
+            return name;
         }
-        public Long getSize()
-        {
-            return this.size;
+        public Long getSize() {
+            return size;
         }
-        public int getNumberOfItems()
-        {
-            return this.numberOfItems;
+        public ArrayList<PagesJson> getPages() {
+            return pages;
         }
-        public int getItemsPerPage()
-        {
-            return this.itemsPerPage;
-        }
-         public int getNumberOfPages()
-        {
-            return this.pages.size();
-        }
-        public ArrayList<PagesJson> getPages()
-        {
-            return this.pages;
-        } 
-        public PagesJson getPage(int i)
-        {
+        public PagesJson getPage(int i) {
             return pages.get(i);
         }
-
-
+        public int getNumPages() {
+            return pages.size();
+        }
         // setters
-        public void setName(String name)
-        {
+        public void setName(String name) {
             this.name = name;
         }
-        public void setSize(Long size)
-        {
+        public void setSize(Long size) {
             this.size = size;
         }
-        public void setPages(ArrayList<PagesJson> pages)
-        {
-            this.pages = new ArrayList<PagesJson>(); 
-        	for(int i = 0 ; i < pages.size(); i++)
-        	{
-        		this.pages.add(pages.get(i));
-        	}
-        } 
-        public void addPage(PagesJson page)
-        {
-            this.pages.add(page);
-            this.size += page.getSize();
+        public void setPages(ArrayList<PagesJson> pages) {
+            this.pages = new ArrayList<PagesJson>();
+			for (int i = 0; i < pages.size(); i++) {
+				this.pages.add(pages.get(i));
+			}
         }
-		public void addPage(Long guid, int page_size)
-        {
-            PagesJson page = new PagesJson();		//metadata
-            page.setGUID(guid);         			//metadata
-            page.setSize(page_size);    			//metadata
-
-            this.addPage(page);
+        public void addPage(Long guid, Long pageSize) {
+            PagesJson newPage = new PagesJson();
+            newPage.setGUID(guid);
+            newPage.setSize(pageSize);
+            pages.add(newPage);
+            size += pageSize;
         }
     };
     
     public class FilesJson 
     {
-        // List<FileJson> file;
-        // Long size;
-        // public FilesJson() 
-        // {
-            
-        // }
-        
-        // // getters
-        // public Long getSize(){
-        //     return file.size();
-        // }
-        
-        // // setters
-        // public void setSize(Long size)
-        // {
-        //     this.size = size;
-        // }
-        List<FileJson> files;
-         public FilesJson() 
-         {
-             files = new ArrayList<FileJson>();
-         }
-
+        List<FileJson> file;
+        public FilesJson() 
+        {
+            file = new ArrayList<FileJson>();
+        }
         // getters
-         public FileJson getFile(int i)
-         {
-            return this.files.get(i);
-         }
-
+        public FileJson getFile(int i) {
+            return file.get(i);
+        }
+        public int getSize() {
+            return file.size();
+        }
         // setters
-         public void addFile(FileJson file)
-         {
-            this.files.add(file);
-         }
-
-         public int size()
-         {
-            return files.size();
-         }
-
-         public void deleteFile(String fileName)
-         {
-         	int index_to_remove = 0;
-         	for(int i = 0 ; i < files.size(); i++)
-         	{
-         		if(files.get(i).getName().equals(fileName))
-         		{
-					index_to_remove = i;
-         		}
-         	}
-
-         	files.remove(index_to_remove);
-         }
+        public void addFile(FileJson fileToAdd) {
+            file.add(fileToAdd);
+        }
+        //deleter
+        public boolean deleteFile(String filename) {
+            for (int i = 0; i < file.size(); i++) {
+				if (file.get(i).getName().equals(filename)) {
+                    file.remove(i);
+                    return true;
+				}
+            }
+            return false;
+        }
     };
+    
     
     int port;
     Chord chord;
+    
     
     private long md5(String objectName)
     {
@@ -271,6 +164,8 @@ public class DFS
         return 0;
     }
     
+    
+    
     public DFS(int port) throws Exception
     {
         
@@ -288,6 +183,7 @@ public class DFS
         
     }
     
+    
     /**
     * Join the chord
     *
@@ -297,6 +193,7 @@ public class DFS
         chord.joinRing(Ip, port);
         chord.print();
     }
+    
     
     /**
     * leave the chord
@@ -363,7 +260,11 @@ public class DFS
         // TODO:  Change the name in Metadata
         // Write Metadata
     }
-      
+
+    
+    //WRITEPAGEDATA MIGHT BE NEEDED****************************************************************************************************************************************
+    
+    
     /**
     * List the files in the system
     *
@@ -372,14 +273,16 @@ public class DFS
     public String lists() throws Exception
     {
         String listOfFiles = "";
-        FilesJson files = readMetaData();
-        for(int i = 0 ; i < files.size(); i++)
-        {
-            listOfFiles += files.getFile(i).name + "\n";
-        }
 
-        //System.out.println(TAG + ":files.size() == " + files.size());//DEBUG
-        if(files.size() == 0 ){return "Empty";}
+        FilesJson files = readMetaData();
+        for (int i = 0; i < files.getSize(); i++) {
+			listOfFiles += files.getFile(i).getName() + "\n";
+		}
+        
+        if (files.getSize() == 0) {
+			return "Empty DFS";
+		}
+
         return listOfFiles;
     }
     
@@ -390,11 +293,13 @@ public class DFS
     */
     public void create(String fileName) throws Exception
     {
-        // TODO: Create the file fileName by adding a new entry to the Metadata
-        // Write Metadata
-        
-        
-        
+        //Create file entry
+        FileJson fileJson = new FileJson();
+        fileJson.setName(fileName);
+        // Write file entry to Metadata
+        FilesJson metadata = readMetaData();
+        metadata.addFile(fileJson);
+        System.out.println("Successfully added " + fileName + " to the metadata");
     }
     
     /**
@@ -483,6 +388,24 @@ public class DFS
     {
         
     }
+
+        /**
+    * Reads a file using inputstream
+    *
+    * @param inputStream a file to read from
+    * @return a string of the read in file
+    */
+    public String inputStreamToString(InputStream inputStream) {
+        try {
+            byte[] bytes = new byte[inputStream.available()];
+            inputStream.read(bytes, 0, bytes.length);
+            String json = new String(bytes);
+            return json;
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
     
 }
 
