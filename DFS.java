@@ -259,6 +259,22 @@ public class DFS
     {
         // TODO:  Change the name in Metadata
         // Write Metadata
+        FileJson file = new FileJson();      	// metadata we want
+        FilesJson metadata = readMetaData();    // All metadata
+        
+        for(int i = 0 ; i < metadata.size(); i++)
+    	{
+    		if(metadata.getFile(i).getName().equals(oldName))
+    		{
+                file = metadata.getFile(i);
+                
+    			//Changes metadata and writes back to Chord
+                file.setName(newName);
+    			writeMetaData(metadata);
+    			return;
+    		}
+    	}
+    	System.out.println("file not found: " + fileName); // DEBUG
     }
 
     
