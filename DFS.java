@@ -367,15 +367,23 @@ public class DFS
 		Long guid = md5(filename + System.currentTimeMillis());
 
 		FilesJson metadata = readMetaData();
+        for (int i = 0; i < metadata.getSize(); i++)
+        {
+            FileJson filejson = metadata.getFile(i);
 
-        // add data to page
-		// TODO*******************************************************************************************************************************************************
-
+            if (filejson.getName().equals(filename)) {
+                filejson.addPage(guid, filejson.getSize());
+                break;
+            }
+        }
+        
+        
 		// locate peer
 		ChordMessageInterface peer = chord.locateSuccessor(guid);
 
 		peer.put(guid, data);
     }
+
     
     
     /**
