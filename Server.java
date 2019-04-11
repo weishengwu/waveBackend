@@ -121,7 +121,7 @@ public class Server {
 			// System.out.println("Request #" + numRequests);
 			// System.out.println("Incoming client request from " + clientAddress + " at
 			// port " + clientPort);
-			System.out.println("Message: " + messageIn);
+			//System.out.println("Message: " + messageIn);
 			/* AT THIS POINT, MESSAGE HAS BEEN RECIEVED AND IS STORED IN "messageIn" */
 		}
 

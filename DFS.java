@@ -416,6 +416,7 @@ public class DFS
 
             if (filejson.getName().equals(fileName)) {
 				guid = filejson.getPage(pageNumber).getGUID();
+				System.out.println("GUID" + guid);
 				break;
 			}
 		}
