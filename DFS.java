@@ -262,7 +262,11 @@ public class DFS
         FileJson file = new FileJson();      	// metadata we want
         FilesJson metadata = readMetaData();    // All metadata
         
+<<<<<<< HEAD
         for(int i = 0 ; i < metadata.getSize(); i++)
+=======
+        for(int i = 0 ; i < metadata.size(); i++)
+>>>>>>> 590a0b91e9bab9f1bea6938b636731c3fb642d94
     	{
     		if(metadata.getFile(i).getName().equals(oldName))
     		{
@@ -274,7 +278,11 @@ public class DFS
     			return;
     		}
     	}
+<<<<<<< HEAD
     	System.out.println("file not found: " + file); // DEBUG
+=======
+    	System.out.println("file not found: " + fileName); // DEBUG
+>>>>>>> 590a0b91e9bab9f1bea6938b636731c3fb642d94
     }
 
     
