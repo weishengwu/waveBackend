@@ -235,6 +235,10 @@ public class DFSCommand {
 		System.out.println("\n move");
 		System.out.println("\n quit");
 	}
+	
+	public DFS getDFS() {
+		return dfs;
+	}
 
 	static public void main(String args[]) throws Exception {
 		if (args.length < 1) {

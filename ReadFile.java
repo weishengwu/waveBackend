@@ -135,4 +135,8 @@ public class ReadFile {
         }
     }
 
+    public static void sendDFS(DFS nonStaticDFS) {
+        dfs = nonStaticDFS;
+    }
+
 }
