@@ -22,7 +22,7 @@ public class DFSCommand {
 		String line = buffer.readLine();
 		// System.out.println("Result " +result);
 		// while (!line.contains("quit")) {
-		while(true) {
+		while(!line.contains("quit")) {
 			String[] result = line.split("\\s");
 			System.out.println("Result " +line);
 			if (result[0].equals("join") && result.length > 1) {
@@ -240,16 +240,16 @@ public class DFSCommand {
 		return dfs;
 	}
 
-	static public void main(String args[]) throws Exception {
-		if (args.length < 1) {
-			throw new IllegalArgumentException("Parameter: <port> <portToJoin>");
-		}
-		if (args.length > 1) {
-			DFSCommand dfsCommand = new DFSCommand(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
-		} else {
-			DFSCommand dfsCommand = new DFSCommand(Integer.parseInt(args[0]), 0);
-		}
+	// static public void main(String args[]) throws Exception {
+	// 	if (args.length < 1) {
+	// 		throw new IllegalArgumentException("Parameter: <port> <portToJoin>");
+	// 	}
+	// 	if (args.length > 1) {
+	// 		DFSCommand dfsCommand = new DFSCommand(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
+	// 	} else {
+	// 		DFSCommand dfsCommand = new DFSCommand(Integer.parseInt(args[0]), 0);
+	// 	}
 
 		//Server server = new Server(dfsCommand.dfs, PORT);
-	}
+	// }
 }

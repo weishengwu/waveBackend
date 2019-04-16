@@ -335,9 +335,9 @@ public class DFS
 		        		JsonObject musicJson = new Gson().fromJson(new Gson().toJson(writeTemp), JsonObject.class);
 		        		String musicListWrite = musicJson.toString();
 		        		//write file here
-		        		new Gson().toJson(musicJson, new FileWriter("assets/temp" + i + ".json"));
+		        		new Gson().toJson(musicJson, new FileWriter("assets/dfs_temp/temp" + i + ".json"));
 		        		//append here
-		        		RemoteInputFileStream appendStream = new RemoteInputFileStream("assets/temp" + i + ".json");
+		        		RemoteInputFileStream appendStream = new RemoteInputFileStream("assets/dfs_temp/temp" + i + ".json");
 		        		append(fileName, appendStream);
 				  		writeTemp = new MusicList();
 		        	}
