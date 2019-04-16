@@ -32,16 +32,16 @@ public class Server {
 
 		//Start Server after DFSCommand
 
-		ReadFile.sendDFS(dfsCommand.getDFS());
 		attendedReq = new HashMap<String,JsonObject>();		//Hashmap of current requests
 		dispatcher = new Dispatcher();						//Dispatcher
-		readfile = new ReadFile();
+		// readfile = new ReadFile();
+		ReadFile.sendDFS(dfsCommand.getDFS());
 		
 		
 		//register objects and methods here
 		SignIn signIn = new SignIn();
 		dispatcher.registerObject(signIn, "SignIn");
-		MusicList musiclist = readfile.loadJsonIntoMusicList();
+		MusicList musiclist = ReadFile.loadJsonIntoMusicList();
 		dispatcher.registerObject(musiclist, "MusicList");
 		EditUser editUser = new EditUser();
 		dispatcher.registerObject(editUser, "EditUser");

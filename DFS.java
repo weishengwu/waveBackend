@@ -257,7 +257,6 @@ public class DFS
     */
     public void move(String oldName, String newName) throws Exception
     {
-        // TODO:  Change the name in Metadata
         // Write Metadata
         FileJson file = new FileJson();      	// metadata we want
         FilesJson metadata = readMetaData();    // All metadata
@@ -315,12 +314,12 @@ public class DFS
         // Write file entry to Metadata
         FilesJson metadata = readMetaData();
         metadata.addFile(fileJson);
+        writeMetaData(metadata);
 
         try {
-        	writeMetaData(metadata);
 	        if(fileName.contains("music")) {
 		        String path = "assets/music.json";
-		        File file = new File(path);   
+                File file = new File(path);
 		        InputStream inputStream = new FileInputStream(file);
 				String myJson = inputStreamToString(inputStream);
 		        MusicList musicList  = new Gson().fromJson(myJson, MusicList.class);
@@ -333,7 +332,7 @@ public class DFS
 
 		        	if((i+1) % MUSIC_PER_PAGE == 0 || i == musicList.size()-1) {
 		        		JsonObject musicJson = new Gson().fromJson(new Gson().toJson(writeTemp), JsonObject.class);
-		        		String musicListWrite = musicJson.toString();
+                        String musicListWrite = musicJson.toString();
 		        		//write file here
 		        		new Gson().toJson(musicJson, new FileWriter("assets/dfs_temp/temp" + i + ".json"));
 		        		//append here
@@ -345,17 +344,21 @@ public class DFS
 
 	    	}
 	    	else if (fileName.contains("user")) {
-	    		String path = "assets/music.json";
-		        File file = new File(path);   
+	    		String path = "assets/users.json";
+                File file = new File(path);
 		        InputStream inputStream = new FileInputStream(file);
-				String myJson = inputStreamToString(inputStream);
-				UserList userList = new Gson().fromJson(myJson, UserList.class);
-			    JsonObject userJson = new Gson().fromJson(new Gson().toJson(userList), JsonObject.class);
-	    		String userListWrite = userJson.toString();
-	    		//write file here
-	    		new Gson().toJson(userJson, new FileWriter("assets/temp.json"));
+                String myJson = inputStreamToString(inputStream);
+                PrintWriter writer = new PrintWriter("assets/dfs_temp/temp.txt", "UTF-8");
+                writer.println(myJson);
+                writer.close();
+                // UserList userList = new Gson().fromJson(myJson, UserList.class);
+			    // JsonObject userJson = new Gson().fromJson(new Gson().toJson(userList), JsonObject.class);
+                // String userListWrite = userJson.toString();
+	    		// //write file here
+                // new Gson().toJson(userJson, new FileWriter("assets/dfs_temp/temp.json"));
+                // System.out.println("\n\n\n\n\n" + userJson.toString() + "\n\n\n\n\n");
 	    		//append here
-	    		RemoteInputFileStream appendStream = new RemoteInputFileStream("assets/temp.json");
+	    		RemoteInputFileStream appendStream = new RemoteInputFileStream("assets/dfs_temp/temp.txt");
 	    		append(fileName, appendStream);
 	    	}
 	    	else {
@@ -367,7 +370,7 @@ public class DFS
         {
         	e.printStackTrace(); 
         }
-        System.out.println("Successfully added " + fileName + " to the metadata");
+        System.out.println("\nSuccessfully added " + fileName + " to the metadata\n");
     }
     
     /**
@@ -397,7 +400,7 @@ public class DFS
 				return;
 			}
 		}
-        
+        System.out.println("\nSuccessfully deleted " + fileName + " from the metadata\n");
     }
     
     /**
@@ -435,8 +438,6 @@ public class DFS
 		Long guid = md5(filename + System.currentTimeMillis());
 		FilesJson metadata = readMetaData();
 
-        // for (int i = 0; i < metadata.getSize(); i++)
-        // {
 		for(int i = 0 ; i < metadata.getSize(); i++)
     	{
     		if(metadata.getFile(i).getName().equals(filename))
@@ -445,21 +446,15 @@ public class DFS
                 FileJson file = metadata.getFile(i);
                 
     			//Changes metadata and writes back to Chord
-                file.addPage(guid, file.getSize());
+                file.addPage(guid, (long)data.toString().getBytes().length);
     			writeMetaData(metadata);
     			break;
     		}
     	}
-
-        // if (filejson.getName().equals(filename)) {
-        // }
-        // }
-   
         
 		// locate peer
-		//ChordMessageInterface peer = chord.locateSuccessor(guid);
-
-		//peer.put(guid, data);
+		ChordMessageInterface peer = chord.locateSuccessor(guid);
+		peer.put(guid, data);
     }
 
 

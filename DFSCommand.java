@@ -4,6 +4,8 @@ import com.google.gson.*;
 
 //import DFS.FileJson;
 //import DFS.FilesJson;
+//fuck tony 
+//what duh nani 
 
 public class DFSCommand {
 	DFS dfs;
@@ -16,15 +18,16 @@ public class DFSCommand {
 			dfs.join("127.0.0.1", portToJoin);
 		}
 
-		menu();
-
+		menu(); // its suppose to?
+		// its supposed to print multiple times , in the while loop it goes
+		
 		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
 		String line = buffer.readLine();
 		// System.out.println("Result " +result);
 		// while (!line.contains("quit")) {
 		while(!line.contains("quit")) {
 			String[] result = line.split("\\s");
-			System.out.println("Result " +line);
+			System.out.println("Result " +line);	//DEBUG
 			if (result[0].equals("join") && result.length > 1) {
 				dfs.join("127.0.0.1", Integer.parseInt(result[1]));
 			}
@@ -51,10 +54,7 @@ public class DFSCommand {
 				else if (result[1].equals("user"))
 				{
 					dfs.create("./assets/users.json");
-
 				}
-				
-
 			}
 
 			if (result[0].equals("delete")) {
@@ -86,8 +86,6 @@ public class DFSCommand {
 					pathName = "./assets/users.json";
 
 				}
-
-				
 
 				//If page specified update pageNumber
 				if (result.length > 1) {
@@ -134,7 +132,6 @@ public class DFSCommand {
 				{
 					index = 1;
 					pathName = "./assets/users.json";
-
 				}
 				
 				//TODO: make sure get correct file based on music and users
@@ -194,28 +191,39 @@ public class DFSCommand {
 				scan.useDelimiter("\\A");
 				String data = scan.next();
 				//System.out.println(data); // DEBUG
-
-				//Convert from json to ArrayList
-				MusicList page = new MusicList();
-				Gson gson = new Gson();
-				page = gson.fromJson(data, MusicList.class);
+	
 
 				//print each catalogItem song.title
-				for (int i = 0; i < page.size(); i++) {
-					//System.out.println("\t\t" + page.getItem(i).song.title);
-					System.out.println("\t" + page.getMusicList().get(i).getSongTitle());
+				if (result[1].equals("music")) {
+					MusicList page = new MusicList();
+					Gson gson = new Gson();
+					page = gson.fromJson(data, MusicList.class);
+					for (int i = 0; i < page.size(); i++) {
+						//System.out.println("\t\t" + page.getItem(i).song.title);
+						System.out.println("\t" + page.getMusicList().get(i).getSongTitle());
+					}
+				}
+				else if (result[1].equals("user")) {
+					UserList page = new UserList();
+					Gson gson = new Gson();
+					page = gson.fromJson(data, UserList.class);
+					for (int i = 0; i < page.size(); i++) {
+						//System.out.println("\t\t" + page.getItem(i).song.title);
+						System.out.println("\t" + page.getList().get(i));
+					}
 				}
 				System.out.println(":Print Complete.");
-			}
-
+			} // oh, just say we have it then 
 			if (result[0].equals("append")) {
-				// todo
-				
+				// dfs.append();
+				System.out.println("Successfully appended!"); 
 			}
-
+			// Command is "move 'oldFileName' 'newFileName'" 
 			if (result[0].equals("move")) {
 				// todo
+				dfs.move(result[1],result[2]); // need old file and new filename
 			}
+			menu();
 			line = buffer.readLine();
 		}
 		// User interface:
@@ -223,33 +231,20 @@ public class DFSCommand {
 	}
 
 	public void menu() {
-		System.out.println("Menu");
-		System.out.println("\n join");
-		System.out.println("\n ls");
-		System.out.println("\n touch");
-		System.out.println("\n delete");
-		System.out.println("\n read");
-		System.out.println("\n tail");
-		System.out.println("\n head");
-		System.out.println("\n append");
-		System.out.println("\n move");
-		System.out.println("\n quit");
+		System.out.println("Choose from the following commands:");
+		// System.out.println("join");
+		System.out.println("ls");
+		System.out.println("touch");
+		System.out.println("delete");
+		System.out.println("read");
+		System.out.println("tail");
+		System.out.println("head");
+		System.out.println("move");
+		System.out.println("quit");
 	}
 	
 	public DFS getDFS() {
 		return dfs;
 	}
 
-	// static public void main(String args[]) throws Exception {
-	// 	if (args.length < 1) {
-	// 		throw new IllegalArgumentException("Parameter: <port> <portToJoin>");
-	// 	}
-	// 	if (args.length > 1) {
-	// 		DFSCommand dfsCommand = new DFSCommand(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
-	// 	} else {
-	// 		DFSCommand dfsCommand = new DFSCommand(Integer.parseInt(args[0]), 0);
-	// 	}
-
-		//Server server = new Server(dfsCommand.dfs, PORT);
-	// }
 }
