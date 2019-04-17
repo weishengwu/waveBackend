@@ -121,7 +121,7 @@ public class Chord extends java.rmi.server.UnicastRemoteObject implements ChordM
           output.close();
       }
       catch (IOException e) {
-          System.out.println(e);
+        //   System.out.println(e);
       }
     }
 
@@ -138,7 +138,7 @@ public class Chord extends java.rmi.server.UnicastRemoteObject implements ChordM
           output.close();
       }
       catch (IOException e) {
-          System.out.println(e);
+        //   System.out.println(e);
       }
     }
 /**

@@ -16,7 +16,6 @@ public class Server {
 	private static SignIn login;
 	private static HashMap<String,JsonObject> attendedReq;
 	private static Dispatcher dispatcher;
-	private static ReadFile readfile;
 
 	public static void main(String[] args) throws Exception {
 		//Start DFSCommand first
@@ -34,8 +33,7 @@ public class Server {
 
 		attendedReq = new HashMap<String,JsonObject>();		//Hashmap of current requests
 		dispatcher = new Dispatcher();						//Dispatcher
-		// readfile = new ReadFile();
-		ReadFile.sendDFS(dfsCommand.getDFS());
+		// ReadFile.sendDFS(dfsCommand.getDFS());
 		
 		
 		//register objects and methods here

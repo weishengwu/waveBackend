@@ -89,7 +89,7 @@ public class DFSCommand {
 
 				//If page specified update pageNumber
 				if (result.length > 1) {
-					pageNumber = Integer.parseInt(result[1]);
+					pageNumber = Integer.parseInt(result[2]);
 
 				}
 				System.out.println("reading page #" + pageNumber);
@@ -101,18 +101,46 @@ public class DFSCommand {
 				//Scanner
 				Scanner scan = new Scanner(dataraw);
 				scan.useDelimiter("\\A");
+				// scan.useDelimiter("\0");
 				String data = scan.next();
-				//System.out.println(data); // DEBUG
+				System.out.println("\n\n\n-------------------------------------\n\n");
+				System.out.println(data); // DEBUG
+				System.out.println("\n\n\n-------------------------------------\n\n");
 
 				//Convert from json to ArrayList
-				MusicList page = new MusicList();
-				Gson gson = new Gson();
-				page = gson.fromJson(data, MusicList.class);
+				if (result[1].equals("music")) {
+					MusicList page = new MusicList();
+					Gson gson = new GsonBuilder().setPrettyPrinting().create();
+					page = gson.fromJson(data, MusicList.class);
+					
+					for (int i = 0; i < page.size(); i++)
+					{
+						System.out.println("\n\n\n-------------------------------------\n\n");
+						//System.out.println("\t\t" + page.getItem(i).song.title);
 
-				//print each catalogItem song.title
-				for (int i = 0; i < page.size(); i++) {
-					//System.out.println("\t\t" + page.getItem(i).song.title);
-					System.out.println("\t" + page.getMusicList().get(i).getSongTitle());
+						System.out.println("\t" + page.getMusicList().get(i).getSongTitle());
+						System.out.println("\t" + page.size());
+
+						System.out.println("\n\n\n-------------------------------------\n\n");
+					}
+
+					
+				}
+
+
+				else if (result[1].equals("user")) {
+					UserList page = new UserList();
+					Gson gson = new Gson();
+					page = gson.fromJson(data, UserList.class);
+					
+						//System.out.println("\t\t" + page.getItem(i).song.title);
+						for(int i = 0; i < page.getList().size(); i++)
+						{
+							System.out.println("\n\n\n-------------------------------------\n\n");
+							System.out.println("\t" + page.getList().get(i));
+							System.out.println("\n\n\n-------------------------------------\n\n");
+						}
+					
 				}
 				System.out.println(":Print Complete.");
 			}
@@ -148,16 +176,37 @@ public class DFSCommand {
 				String data = scan.next();
 				//System.out.println(data); // DEBUG
 
-				//Convert from json to ArrayList
-				MusicList page = new MusicList();
-				Gson gson = new Gson();
-				page = gson.fromJson(data, MusicList.class);
+				
+				if (result[1].equals("music")) {
+					MusicList page = new MusicList();
+					Gson gson = new Gson();
+					page = gson.fromJson(data, MusicList.class);
+					
+					for (int i = 0; i < page.size(); i++)
+					{
+						//System.out.println("\t\t" + page.getItem(i).song.title);
+						System.out.println("\t" + page.getMusicList().get(i).getSongTitle());
+						System.out.println("\t" + page.size());
+					}
 
-				//print each catalogItem song.title
-				for (int i = 0; i < page.size(); i++) {
-					//System.out.println("\t\t" + page.getItem(i).song.title);
-					System.out.println("\t" + page.getMusicList().get(i).getSongTitle());
+					
 				}
+
+
+				else if (result[1].equals("user")) {
+					UserList page = new UserList();
+					Gson gson = new Gson();
+					page = gson.fromJson(data, UserList.class);
+					
+						//System.out.println("\t\t" + page.getItem(i).song.title);
+						for(int i = 0; i < page.getList().size(); i++)
+						{
+							System.out.println("\t" + page.getList().get(i));
+
+						}
+					
+				}
+
 				System.out.println(":Print Complete.");
 			}
 
@@ -177,10 +226,8 @@ public class DFSCommand {
 					pathName = "./assets/users.json";
 
 				}
-				
-				//TODO: make sure get correct file based on music and users
+
 				int pageNumber = 0;
-				System.out.println("reading page #" + pageNumber);
 
 				//Remote Input File Stream
 				RemoteInputFileStream dataraw = dfs.read(pathName, pageNumber);
@@ -190,7 +237,7 @@ public class DFSCommand {
 				Scanner scan = new Scanner(dataraw);
 				scan.useDelimiter("\\A");
 				String data = scan.next();
-				//System.out.println(data); // DEBUG
+				//System.out.println("gg" + data); // DEBUG
 	
 
 				//print each catalogItem song.title
@@ -198,22 +245,30 @@ public class DFSCommand {
 					MusicList page = new MusicList();
 					Gson gson = new Gson();
 					page = gson.fromJson(data, MusicList.class);
-					for (int i = 0; i < page.size(); i++) {
+					
+					for (int i = 0; i < page.size(); i++)
+					{
 						//System.out.println("\t\t" + page.getItem(i).song.title);
 						System.out.println("\t" + page.getMusicList().get(i).getSongTitle());
+						System.out.println("\t" + page.size());
 					}
+
+					
 				}
 				else if (result[1].equals("user")) {
 					UserList page = new UserList();
 					Gson gson = new Gson();
 					page = gson.fromJson(data, UserList.class);
-					for (int i = 0; i < page.size(); i++) {
+					
 						//System.out.println("\t\t" + page.getItem(i).song.title);
-						System.out.println("\t" + page.getList().get(i));
-					}
+						for(int i = 0; i < page.getList().size(); i++)
+						{
+							System.out.println("\t" + page.getList().get(i));
+
+						}
+					
 				}
-				System.out.println(":Print Complete.");
-			} // oh, just say we have it then 
+			} 
 			if (result[0].equals("append")) {
 				// dfs.append();
 				System.out.println("Successfully appended!"); 

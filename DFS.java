@@ -324,7 +324,7 @@ public class DFS
 				String myJson = inputStreamToString(inputStream);
 		        MusicList musicList  = new Gson().fromJson(myJson, MusicList.class);
 
-		        final int MUSIC_PER_PAGE = 100;
+		        final int MUSIC_PER_PAGE = 50;
 
 		        MusicList writeTemp = new MusicList();
 		        for(int i = 0; i < musicList.size(); i++) {
