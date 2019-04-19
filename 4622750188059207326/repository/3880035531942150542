@@ -1,0 +1,160 @@
+{
+  "users": [
+    {
+      "username": "Wei",
+      "password": "password",
+      "playLists": [
+        {
+          "plName": "Good Vibezz",
+          "song": [
+            {
+              "ID": "SOMZWCG12A8C13C480"
+            },
+            {
+              "ID": "SOCIWDW12A8C13D406"
+            },
+            {
+              "ID": "SOYMRWW12A6D4FAB14"
+            },
+            {
+              "ID": "SOKEJEJ12A8C13E0D0"
+            }
+          ]
+        },
+        {
+          "plName": "Morning Run",
+          "song": [
+            {
+              "ID": "SOQHXMF12AB0182363"
+            },
+            {
+              "ID": "SOMUYGI12AB0188633"
+            },
+            {
+              "ID": "SORAMLE12AB017C8B0"
+            },
+            {
+              "ID": "SOBONFF12A6D4F84D8"
+            }
+          ]
+        },
+        {
+          "plName": "sdjslfjslj;",
+          "song": [
+            {
+              "ID": "SOQHXMF12AB0182363"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "username": "Ken",
+      "password": "password",
+      "playLists": [
+        {
+          "plName": "Chinese",
+          "song": [
+            {
+              "ID": "SONHOTT12A8C13493C"
+            },
+            {
+              "ID": "SOFSOCN12A8C143F5D"
+            },
+            {
+              "ID": "SOXVLOJ12AB0189215"
+            },
+            {
+              "ID": "SONHOTT12A8C13493C"
+            }
+          ]
+        },
+        {
+          "plName": "Study",
+          "song": [
+            {
+              "ID": "SOIAZJW12AB01853F1"
+            },
+            {
+              "ID": "SOUDSGM12AC9618304"
+            },
+            {
+              "ID": "SORAMLE12AB017C8B0"
+            },
+            {
+              "ID": "SOBONFF12A6D4F84D8"
+            },
+            {
+              "ID": "SOHUOAP12A8AE488E9"
+            },
+            {
+              "ID": "SOXVLOJ12AB0189215"
+            }
+          ]
+        },
+        {
+          "plName": "Oldies",
+          "song": [
+            {
+              "ID": "SOMJBYD12A6D4F8557"
+            },
+            {
+              "ID": "SOHKNRJ12A6701D1F8"
+            }
+          ]
+        },
+        {
+          "plName": "Spicy",
+          "song": [
+            {
+              "ID": "SOXVLOJ12AB0189215"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "username": "Peter",
+      "password": "password",
+      "playLists": [
+        {
+          "plName": "Anime",
+          "song": [
+            {
+              "ID": "SOILPQQ12AB017E82A"
+            },
+            {
+              "ID": "SOXLBJT12A8C140925"
+            },
+            {
+              "ID": "SONHOTT12A8C13493C"
+            }
+          ]
+        },
+        {
+          "plName": "Test2",
+          "song": [
+            {
+              "ID": "SOMZWCG12A8C13C480"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "username": "Preston",
+      "password": "password",
+      "playLists": []
+    },
+    {
+      "username": "Chad",
+      "password": "password",
+      "playLists": []
+    },
+    {
+      "username": "Tony",
+      "password": "password",
+      "playLists": []
+    }
+  ]
+}

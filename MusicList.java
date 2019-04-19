@@ -62,7 +62,7 @@ public class MusicList implements Serializable{
     //     return retObject.toString();
     // }
     public String returnSongs(String s) {
-        int start = Integer.parseInt(s);
+        int start = Integer.parseInt(s)*100;
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         JsonObject retObject = new JsonObject();
         JsonArray musicArray = new JsonArray();
@@ -85,6 +85,10 @@ public class MusicList implements Serializable{
         if (query.contains("-")) {
             artist = query.split("-")[0].trim();
             song = query.split("-")[1].trim();
+        }
+        if(!artist.equals("")) {
+            artist = "fdsaifhdsiofhdihafidsoafa";
+            song = "djadsajdsahofiahiofahfoias";
         }
         for(int i = 0; i < list.size(); i++) {
             if (    (   list.get(i).getArtistName().contains(artist) &&  list.get(i).getSongTitle().contains(song)   )
