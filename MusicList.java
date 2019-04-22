@@ -86,13 +86,14 @@ public class MusicList implements Serializable{
             artist = query.split("-")[0].trim();
             song = query.split("-")[1].trim();
         }
-        if(!artist.equals("")) {
+        else {
             artist = "fdsaifhdsiofhdihafidsoafa";
             song = "djadsajdsahofiahiofahfoias";
         }
         for(int i = 0; i < list.size(); i++) {
             if (    (   list.get(i).getArtistName().contains(artist) &&  list.get(i).getSongTitle().contains(song)   )
-            ||      (   list.get(i).getArtistName().contains(query) ||  list.get(i).getSongTitle().contains(query)   )     ) {
+                    ||  list.get(i).getArtistName().contains(query)
+                    ||  list.get(i).getSongTitle().contains(query)     ) {
                 String musicString = gson.toJson(list.get(i));
                 JsonObject musicJson = new Gson().fromJson(musicString, JsonObject.class);    
                 musicArray.add(musicJson);
