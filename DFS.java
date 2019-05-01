@@ -9,7 +9,6 @@ import com.google.gson.*;
 import java.io.InputStream;
 import java.util.*;
 
-
 /* JSON Format
 
 {"file":
@@ -32,94 +31,30 @@ import java.util.*;
 } 
 */
 
-
-
 public class DFS {
-  public void runMapReduce(PagesJson[] fileInput, PagesJson[] fileOutput) {
-    int size = 0; // If the remote methods are in Chord, then size is a
-    //  variable of Chord
-    DFS peer; //GUID for successor~Tony
-    int interval = 0;
-    int guid = 0;
-    int[] counter = {};
-    String fileName = "";
-    //chord.successor.onChordSize(guid, 1); // Obtain the number of nodes
-    while (size > 0) { // Obtained from onNetworkSize after a full cycle
-      interval = 1936 / size; // Assuming 38 characters A-Z, 0-9, _, +.
-      //1936 = 38*38
-    }
-    int lower = 0;
-    try {
-      create(fileName);
-      for (int i = 0; i < (size - 1); i++) { //for i in [range(0, size-1]
-        long page = md5(fileName + i);
-        double lowerBoundInterval = (Math.floor(lower / 38)) + (lower % 38);
-        //appendEmptyPage(fileName, page, lowerBoundInterval);
-        lower += interval;
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    // mapreducer is an instance of the class that
-    // implements MapReduceInterface
-    for (PagesJson page: fileInput) {
-      counter[guid]++;
-      //peer = locateSuccessor(page.guid);
-      //peer.mapContext(page.guid, mapreducer, this, fileOutput + ".map");
-    }
-    while (counter[guid] != 0) { //wait until counter[fileInput] == 0
-      //bulkTree(fileInput);
-      for (PagesJson page: fileInput) {
-        long pages = md5(fileName);
-        //long peer = locateSuccessor(page.guid);
-        //peer.bulk(page);
-      }
-      //createFile(fileOutput, interval, size);
-      try {
-        create(fileName);
-        for (int i = 0; i < (size - 1); i++) { //for i in [range(0, size-1]
-          long page = md5(fileName + i);
-          double lowerBoundInterval = (Math.floor(lower / 38)) + (lower % 38);
-          //appendEmptyPage(fileName, page, lowerBoundInterval);
-          lower += interval;
-        }
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
-    for (PagesJson page: fileOutput) { //for each page in fileOutput + ".map";
-      counter[guid]++;
-      //peer = locateSuccessor(page.guid);
-      //peer.reduceContext(page.guid, mapreducer, this, fileOutput);
-    }
-    while (counter[guid] != 0) { //wait until counter[fileInput] == 0
-      //bulkTree(fileOutput);
-      for (PagesJson page: fileInput) {
-        long pages = md5(fileName);
-        //long peer = locateSuccessor(page.guid);
-        //peer.bulk(page);
-      }
-    }
-  }
-
   public class PagesJson {
     Long guid;
     Long size;
+
     public PagesJson() {
-      guid = (long) - 1;
+      guid = (long) -1;
       size = (long) 0;
     }
+
     // getters
     public Long getGUID() {
       return guid;
     }
+
     public Long getSize() {
       return size;
     }
+
     // setters
     public void setGUID(Long guid) {
       this.guid = guid;
     }
+
     public void setSize(Long size) {
       this.size = size;
     }
@@ -128,41 +63,51 @@ public class DFS {
   public class FileJson {
     String name;
     Long size;
-    ArrayList < PagesJson > pages;
+    ArrayList<PagesJson> pages;
+
     public FileJson() {
       name = "empty";
       size = (long) 0;
-      pages = new ArrayList < PagesJson > ();
+      pages = new ArrayList<PagesJson>();
     }
+
     // getters
     public String getName() {
       return name;
     }
+
     public Long getSize() {
       return size;
     }
-    public ArrayList < PagesJson > getPages() {
+
+    public ArrayList<PagesJson> getPages() {
       return pages;
     }
+
     public PagesJson getPage(int i) {
       return pages.get(i);
     }
+
     public int getNumPages() {
       return pages.size();
     }
+
     // setters
     public void setName(String name) {
       this.name = name;
     }
+
     public void setSize(Long size) {
       this.size = size;
     }
-    public void setPages(ArrayList < PagesJson > pages) {
-      this.pages = new ArrayList < PagesJson > ();
+
+    public void setPages(ArrayList<PagesJson> pages) {
+      this.pages = new ArrayList<PagesJson>();
       for (int i = 0; i < pages.size(); i++) {
         this.pages.add(pages.get(i));
       }
     }
+
     public void addPage(Long guid, Long pageSize) {
       PagesJson newPage = new PagesJson();
       newPage.setGUID(guid);
@@ -173,22 +118,27 @@ public class DFS {
   };
 
   public class FilesJson {
-    List < FileJson > file;
+    List<FileJson> file;
+
     public FilesJson() {
-      file = new ArrayList < FileJson > ();
+      file = new ArrayList<FileJson>();
     }
+
     // getters
     public FileJson getFile(int i) {
       return file.get(i);
     }
+
     public int getSize() {
       return file.size();
     }
+
     // setters
     public void addFile(FileJson fileToAdd) {
       file.add(fileToAdd);
     }
-    //deleter
+
+    // deleter
     public boolean deleteFile(String filename) {
       for (int i = 0; i < file.size(); i++) {
         if (file.get(i).getName().equals(filename)) {
@@ -200,10 +150,8 @@ public class DFS {
     }
   };
 
-
   int port;
   Chord chord;
-
 
   private static long md5(String objectName) {
     try {
@@ -219,10 +167,7 @@ public class DFS {
     return 0;
   }
 
-
-
   public DFS(int port) throws Exception {
-
 
     this.port = port;
     long guid = md5("" + port);
@@ -237,7 +182,6 @@ public class DFS {
 
   }
 
-
   /**
    * Join the chord
    *
@@ -246,7 +190,6 @@ public class DFS {
     chord.joinRing(Ip, port);
     chord.print();
   }
-
 
   /**
    * leave the chord
@@ -312,7 +255,7 @@ public class DFS {
       if (metadata.getFile(i).getName().equals(oldName)) {
         file = metadata.getFile(i);
 
-        //Changes metadata and writes back to Chord
+        // Changes metadata and writes back to Chord
         file.setName(newName);
         writeMetaData(metadata);
         return;
@@ -321,9 +264,8 @@ public class DFS {
     System.out.println("file not found: " + file); // DEBUG
   }
 
-
-  //WRITEPAGEDATA MIGHT BE NEEDED****************************************************************************************************************************************
-
+  // WRITEPAGEDATA MIGHT BE
+  // NEEDED****************************************************************************************************************************************
 
   /**
    * List the files in the system
@@ -346,12 +288,12 @@ public class DFS {
   }
 
   /**
-   * create an empty file 
+   * create an empty file
    *
    * @param filename Name of the file
    */
   public void create(String fileName) throws Exception {
-    //Create file entry
+    // Create file entry
     FileJson fileJson = new FileJson();
     fileJson.setName(fileName);
     // Write file entry to Metadata
@@ -376,9 +318,9 @@ public class DFS {
           if ((i + 1) % MUSIC_PER_PAGE == 0 || i == musicList.size() - 1) {
             JsonObject musicJson = new Gson().fromJson(new Gson().toJson(writeTemp), JsonObject.class);
             String musicListWrite = musicJson.toString();
-            //write file here
+            // write file here
             new Gson().toJson(musicJson, new FileWriter("assets/dfs_temp/temp" + i + ".json"));
-            //append here
+            // append here
             RemoteInputFileStream appendStream = new RemoteInputFileStream("assets/dfs_temp/temp" + i + ".json");
             append(fileName, appendStream);
             writeTemp = new MusicList();
@@ -394,12 +336,13 @@ public class DFS {
         writer.println(myJson);
         writer.close();
         // UserList userList = new Gson().fromJson(myJson, UserList.class);
-        // JsonObject userJson = new Gson().fromJson(new Gson().toJson(userList), JsonObject.class);
+        // JsonObject userJson = new Gson().fromJson(new Gson().toJson(userList),
+        // JsonObject.class);
         // String userListWrite = userJson.toString();
         // //write file here
         // new Gson().toJson(userJson, new FileWriter("assets/dfs_temp/temp.json"));
         // System.out.println("\n\n\n\n\n" + userJson.toString() + "\n\n\n\n\n");
-        //append here
+        // append here
         RemoteInputFileStream appendStream = new RemoteInputFileStream("assets/dfs_temp/temp.txt");
         append(fileName, appendStream);
       } else {
@@ -413,7 +356,7 @@ public class DFS {
   }
 
   /**
-   * delete file 
+   * delete file
    *
    * @param filename Name of the file
    */
@@ -442,14 +385,14 @@ public class DFS {
   }
 
   /**
-   * Read block pageNumber of fileName 
+   * Read block pageNumber of fileName
    *
-   * @param filename Name of the file
-   * @param pageNumber number of block. 
+   * @param filename   Name of the file
+   * @param pageNumber number of block.
    */
   public RemoteInputFileStream read(String fileName, int pageNumber) throws Exception {
     FilesJson metadata = readMetaData();
-    long guid = (long) - 1;
+    long guid = (long) -1;
 
     for (int i = 0; i < metadata.getSize(); i++) {
       FileJson filejson = metadata.getFile(i);
@@ -465,10 +408,10 @@ public class DFS {
   }
 
   /**
-   * Add a page to the file                
+   * Add a page to the file
    *
    * @param filename Name of the file
-   * @param data RemoteInputStream. 
+   * @param data     RemoteInputStream.
    */
   public void append(String filename, RemoteInputFileStream data) throws Exception {
     Long guid = md5(filename + System.currentTimeMillis());
@@ -479,7 +422,7 @@ public class DFS {
 
         FileJson file = metadata.getFile(i);
 
-        //Changes metadata and writes back to Chord
+        // Changes metadata and writes back to Chord
         file.addPage(guid, (long) data.toString().getBytes().length);
         writeMetaData(metadata);
         break;
@@ -490,7 +433,6 @@ public class DFS {
     ChordMessageInterface peer = chord.locateSuccessor(guid);
     peer.put(guid, data);
   }
-
 
   /**
    * Reads a file using inputstream
@@ -509,5 +451,124 @@ public class DFS {
     }
   }
 
+  int size = 0; // If the remote methods are in Chord, then size is a
+  DFS peer; // GUID for successor
+  int interval = 0;
+  int guid = 0;
+  int[] counter = {};
+  String fileName = "";
 
+  public void runMapReduce(PagesJson[] fileInput, PagesJson[] fileOutput) {
+    // chord.successor.onChordSize(guid, 1); // Obtain the number of nodes
+    while (size > 0) { // Obtained from onNetworkSize after a full cycle
+      interval = 1936 / size; // Assuming 38 characters A-Z, 0-9, _, +.
+      // 1936 = 38*38
+    }
+    int lower = 0;
+    try {
+      create(fileName);
+      for (int i = 0; i < (size - 1); i++) { // for i in [range(0, size-1]
+        long page = md5(fileName + i);
+        double lowerBoundInterval = (Math.floor(lower / 38)) + (lower % 38);
+        // appendEmptyPage(fileName, page, lowerBoundInterval);
+        lower += interval;
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    // mapreducer is an instance of the class that
+    // implements MapReduceInterface
+    for (PagesJson page : fileInput) {
+      counter[guid]++;
+      // peer = locateSuccessor(page.guid);
+      // peer.mapContext(page.guid, mapreducer, this, fileOutput + ".map");
+    }
+    while (counter[guid] != 0) { // wait until counter[fileInput] == 0
+      // bulkTree(fileInput);
+      for (PagesJson page : fileInput) {
+        long pages = md5(fileName);
+        // long peer = locateSuccessor(page.guid);
+        // peer.bulk(page);
+      }
+      // createFile(fileOutput, interval, size);
+      try {
+        create(fileName);
+        for (int i = 0; i < (size - 1); i++) { // for i in [range(0, size-1]
+          long page = md5(fileName + i);
+          double lowerBoundInterval = (Math.floor(lower / 38)) + (lower % 38);
+          // appendEmptyPage(fileName, page, lowerBoundInterval);
+          lower += interval;
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    for (PagesJson page : fileOutput) { // for each page in fileOutput + ".map";
+      counter[guid]++;
+      // peer = locateSuccessor(page.guid);
+      // peer.reduceContext(page.guid, mapreducer, this, fileOutput);
+    }
+    while (counter[guid] != 0) { // wait until counter[fileInput] == 0
+      // bulkTree(fileOutput);
+      for (PagesJson page : fileInput) {
+        long pages = md5(fileName);
+        // long peer = locateSuccessor(page.guid);
+        // peer.bulk(page);
+      }
+    }
+  }
+
+  public void emit(String key, JsonObject values, String file) {
+    String[] page = {};
+    for (int i = 0; i < page.length; i++) {
+      page[i] = page[i + 1] + key;
+    }
+    addKeyValue(key, values);
+  }
+
+  public void addKeyValue(String key, JsonObject values) {
+    TreeMap<String, JsonObject> tree = new TreeMap<String, JsonObject>();
+    if (tree.containsKey(key)) {
+      JsonObject list = new JsonObject();
+      tree.put(key, list);
+    }
+    JsonObject value = tree.get(key);
+  }
+
+  public void onChordSize(int source, int n) {
+    int successor = 0;
+    if (source == n) {
+      // successor.onNetworkSize(source, n++);
+    }
+  }
+
+  public void mapContext(String[] page, Mapper mapper, DFS coordinator, String file) {
+    for (String obj : page) {
+      String index = "";
+      JsonObject value = new JsonObject();
+      try {
+        mapper.map(index, value, this, file);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    coordinator.onPageCompleted(file);
+  }
+
+  public void reduceContext(String[] page, Mapper reducer, DFS coordinator, String file) {
+    for (String obj : page) {
+      String key = "";
+      JsonObject values = new JsonObject();
+      try {
+        reducer.reduce(key, values, this, file);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    coordinator.onPageCompleted(file);
+  }
+
+  public void onPageCompleted(String file) {
+    counter[guid]++;
+  }
 }
