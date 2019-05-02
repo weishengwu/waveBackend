@@ -76,31 +76,50 @@ public class MusicList implements Serializable{
         retObject.add("musiclist", musicArray);
         return retObject.toString();
     }
+    // public String searchSong(String query) {
+    //     String artist = "";
+    //     String song = "";
+    //     Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    //     JsonObject retObject = new JsonObject();
+    //     JsonArray musicArray = new JsonArray();
+    //     if (query.contains("-")) {
+    //         artist = query.split("-")[0].trim();
+    //         song = query.split("-")[1].trim();
+    //     }
+    //     else {
+    //         artist = "fdsaifhdsiofhdihafidsoafa";
+    //         song = "djadsajdsahofiahiofahfoias";
+    //     }
+    //     for(int i = 0; i < list.size(); i++) {
+    //         if (    (   list.get(i).getArtistName().contains(artist) &&  list.get(i).getSongTitle().contains(song)   )
+    //                 ||  list.get(i).getArtistName().contains(query)
+    //                 ||  list.get(i).getSongTitle().contains(query)     ) {
+    //             String musicString = gson.toJson(list.get(i));
+    //             JsonObject musicJson = new Gson().fromJson(musicString, JsonObject.class);    
+    //             musicArray.add(musicJson);
+    //         }
+    //     }
+    //     retObject.add("musiclist", musicArray);
+    //     return retObject.toString();
+    // }
     public String searchSong(String query) {
-        String artist = "";
-        String song = "";
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        JsonObject retObject = new JsonObject();
-        JsonArray musicArray = new JsonArray();
-        if (query.contains("-")) {
-            artist = query.split("-")[0].trim();
-            song = query.split("-")[1].trim();
+        try {
+            File file = new File("assets/search/" + query + ".json");
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        if (file.exists()) {
+            InputStream inputStream = new FileInputStream(file);
+            String myJson = ReadFile.inputStreamtoString(inputStream);
+            return myJson;
         }
         else {
-            artist = "fdsaifhdsiofhdihafidsoafa";
-            song = "djadsajdsahofiahiofahfoias";
+            JsonObject retObject = new JsonObject();
+            retObject.add("musiclist", new JsonArray());
+            return retObject.toString();    
         }
-        for(int i = 0; i < list.size(); i++) {
-            if (    (   list.get(i).getArtistName().contains(artist) &&  list.get(i).getSongTitle().contains(song)   )
-                    ||  list.get(i).getArtistName().contains(query)
-                    ||  list.get(i).getSongTitle().contains(query)     ) {
-                String musicString = gson.toJson(list.get(i));
-                JsonObject musicJson = new Gson().fromJson(musicString, JsonObject.class);    
-                musicArray.add(musicJson);
-            }
-        }
-        retObject.add("musiclist", musicArray);
-        return retObject.toString();
     }
     @Override
     public String toString() {
