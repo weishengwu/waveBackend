@@ -278,6 +278,10 @@ public class DFSCommand {
 				// todo
 				dfs.move(result[1],result[2]); // need old file and new filename
 			}
+			if (result[0].equals("run")) {
+				if (result[1].equals("mapreduce"))
+					dfs.runScuffMapReduce(); // need old file and new filename
+			}
 			menu();
 			line = buffer.readLine();
 		}
@@ -295,6 +299,7 @@ public class DFSCommand {
 		System.out.println("tail");
 		System.out.println("head");
 		System.out.println("move");
+		System.out.println("run mapreduce");
 		System.out.println("quit");
 	}
 	
