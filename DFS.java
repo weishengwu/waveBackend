@@ -470,7 +470,7 @@ public class DFS {
       for (int i = 0; i < (size - 1); i++) { // for i in [range(0, size-1]
         long page = md5(fileName + i);
         double lowerBoundInterval = (Math.floor(lower / 38)) + (lower % 38);
-        // appendEmptyPage(fileName, page, lowerBoundInterval);
+        //appendEmptyPage(fileName, page, lowerBoundInterval);
         lower += interval;
       }
     } catch (Exception e) {
@@ -572,44 +572,4 @@ public class DFS {
     counter[guid]++;
   }
 
-  public void runScuffMapReduce() {
-    MusicList musicList = ReadFile.loadJsonIntoMusicList();
-    for (Music music : musicList.getMusicList()) {
-      ArrayList<String> words = new ArrayList<String>(Arrays.asList(music.getArtistName().split(" ")));
-      words.addAll(Arrays.asList(music.getSongTitle().split(" ")));
-      for (String word : words)
-        addWord(word);
-    }
-  }
-  
-  public void addWord(String word) {
-    String path = "assets/search/";
-    String extension = ".json";
-    MusicList writeList = new MusicList();
-    if(!new File(path + word + extension).exists() && word.length() > 2) {
-      word = word.replaceAll("[^A-Za-z0-9]","");
-      if (word.length() < 2)
-        return;
-      MusicList musicList = ReadFile.loadJsonIntoMusicList();
-      for (Music music : musicList.getMusicList()) {
-        ArrayList<String> words = new ArrayList<String>();
-        words.add(music.getArtistName());
-        words.add(music.getSongTitle());
-        for (String compareWord : words) {
-          if (compareWord.toLowerCase().contains(word.toLowerCase())) {
-            writeList.addSong(music);
-            break;
-          }
-        }
-      }
-      try {
-        JsonObject musicListJson = new Gson().fromJson(new Gson().toJson(writeList), JsonObject.class);
-        new Gson().toJson(musicListJson, new FileWriter(path + word.toLowerCase() + extension));  
-        System.out.println("File created for " + word.toLowerCase());
-      }
-      catch (IOException e) {
-        e.printStackTrace();
-      }
-    } //end if
-  }
 }

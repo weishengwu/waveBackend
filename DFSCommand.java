@@ -280,7 +280,7 @@ public class DFSCommand {
 			}
 			if (result[0].equals("run")) {
 				if (result[1].equals("mapreduce"))
-					dfs.runScuffMapReduce(); // need old file and new filename
+					dfs.runMapReduce(); // need old file and new filename
 			}
 			menu();
 			line = buffer.readLine();

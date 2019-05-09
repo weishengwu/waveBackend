@@ -1,5 +1,5 @@
 import com.google.gson.annotations.SerializedName;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -91,9 +91,9 @@ public class MusicList implements Serializable{
     //         song = "djadsajdsahofiahiofahfoias";
     //     }
     //     for(int i = 0; i < list.size(); i++) {
-    //         if (    (   list.get(i).getArtistName().contains(artist) &&  list.get(i).getSongTitle().contains(song)   )
-    //                 ||  list.get(i).getArtistName().contains(query)
-    //                 ||  list.get(i).getSongTitle().contains(query)     ) {
+    //         if (    (   list.get(i).getArtistName().toLowerCase().contains(artist) &&  list.get(i).getSongTitle().contains(song)   )
+    //                 ||  list.get(i).getArtistName().toLowerCase().contains(query)
+    //                 ||  list.get(i).getSongTitle().toLowerCase().contains(query)     ) {
     //             String musicString = gson.toJson(list.get(i));
     //             JsonObject musicJson = new Gson().fromJson(musicString, JsonObject.class);    
     //             musicArray.add(musicJson);
@@ -104,22 +104,24 @@ public class MusicList implements Serializable{
     // }
     public String searchSong(String query) {
         try {
-            File file = new File("assets/search/" + query + ".json");
+            File file = new File("assets/search/" + query.toLowerCase() + ".json");
+            if (file.exists()) {
+                InputStream inputStream = new FileInputStream(file);
+                String myJson = ReadFile.inputStreamToString(inputStream);
+                return myJson;
+            }
+            else {
+                JsonObject retObject = new JsonObject();
+                retObject.add("musiclist", new JsonArray());
+                return retObject.toString();            
+            }
         }
         catch (IOException e) {
             e.printStackTrace();
         }
-        
-        if (file.exists()) {
-            InputStream inputStream = new FileInputStream(file);
-            String myJson = ReadFile.inputStreamtoString(inputStream);
-            return myJson;
-        }
-        else {
-            JsonObject retObject = new JsonObject();
-            retObject.add("musiclist", new JsonArray());
-            return retObject.toString();    
-        }
+        JsonObject retObject = new JsonObject();
+        retObject.add("musiclist", new JsonArray());
+        return retObject.toString();    
     }
     @Override
     public String toString() {
